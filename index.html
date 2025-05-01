@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retro Mac Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="menu-bar">
+      <div class="apple-logo">
+        <img src="images/face-icon.png" alt="Face Icon" />
+      </div>
+      <ul class="menu-items">
+        <li id="menu-item-name">Priyam Parekh</li>
+        <li id="menu-item-email">
+          <a href="mailto:priyamaparekh@gmail.com">Email</a>
+        </li>
+        <li id="menu-item-linkedin">
+          <a href="https://www.linkedin.com/in/priyam-parekh/" target="_blank"
+            >LinkedIn</a
+          >
+        </li>
+        <li id="menu-item-github">
+          <a href="https://github.com/priyam-parekh" target="_blank">GitHub</a>
+        </li>
+      </ul>
+    </div>
+    <div class="desktop-content">
+      <div class="window" id="portfolio-window">
+        <div class="window-header">
+          <div class="window-controls">
+            <button class="close-button"></button>
+          </div>
+          <div class="title-bar">
+            <div class="title">Priyam's Portfolio HD</div>
+            <div class="title-stripes"></div>
+          </div>
+        </div>
+        <div class="window-info-bar">
+          <span>4 items</span>
+          <span>5.4 MB used</span>
+          <span>24.6 MB free</span>
+        </div>
+        <div class="window-content">
+          <div class="folder-grid">
+            <div class="folder-item" tabindex="0">
+              <img src="images/folder-icon-yellow.png" alt="About Folder" />
+              <span class="icon-label">About</span>
+            </div>
+            <div class="folder-item" tabindex="0">
+              <img src="images/folder-icon-green.png" alt="Projects Folder" />
+              <span class="icon-label">Projects</span>
+            </div>
+            <div class="folder-item" tabindex="0">
+              <img src="images/folder-icon-blue.png" alt="Fun Folder" />
+              <span class="icon-label">Fun</span>
+            </div>
+            <div class="folder-item" tabindex="0">
+              <img src="images/doc-icon.png" alt="Resume Document" />
+              <span class="icon-label">Resume</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="sticky-note" id="tagline-note">
+        <div class="sticky-note-header"></div>
+        <div class="sticky-note-content">
+          Hey I'm Priyam Parekh—a CS and Entrepreneurship student at Brown and
+          <i>full-stack developer</i> passionate about building products people
+          love!
+        </div>
+      </div>
+      <div class="desktop-icons">
+        <div
+          class="desktop-icon"
+          id="harddrive"
+          tabindex="0"
+          title="Reopen Priyam's Portfolio HD window"
+        >
+          <img src="images/hardrive-icon.png" alt="Hard Drive" />
+          <span class="icon-label">Priyam's<br />Portfolio<br />HD</span>
+        </div>
+        <div
+          class="desktop-icon"
+          id="trash"
+          tabindex="0"
+          title="Close all open windows"
+        >
+          <img src="images/trash-icon.png" alt="Trash" />
+          <span class="icon-label">Trash</span>
+        </div>
+      </div>
+    </div>
+    <script>
+      let highestZIndex = 11;
+
+      function makeWindowActive(windowElement) {
+        document
+          .querySelectorAll(".window")
+          .forEach((win) => win.classList.remove("active"));
+        windowElement.classList.add("active");
+        windowElement.style.zIndex = highestZIndex++;
+      }
+
+      function makeWindowDraggable(windowElement) {
+        const header = windowElement.querySelector(".window-header");
+        let isDragging = false;
+        let startX, startY, startLeft, startTop;
+
+        header.addEventListener("mousedown", (e) => {
+          if (e.target.classList.contains("close-button")) return;
+
+          isDragging = true;
+          startX = e.clientX;
+          startY = e.clientY;
+          startLeft = windowElement.offsetLeft;
+          startTop = windowElement.offsetTop;
+          makeWindowActive(windowElement);
+        });
+
+        document.addEventListener("mousemove", (e) => {
+          if (!isDragging) return;
+          e.preventDefault();
+
+          const dx = e.clientX - startX;
+          const dy = e.clientY - startY;
+          let newLeft = startLeft + dx;
+          let newTop = startTop + dy;
+
+          const viewportWidth = document.documentElement.clientWidth;
+          const viewportHeight = document.documentElement.clientHeight;
+          const windowWidth = windowElement.offsetWidth;
+          const windowHeight = windowElement.offsetHeight;
+
+          newLeft = Math.max(0, Math.min(newLeft, viewportWidth - windowWidth));
+          newTop = Math.max(0, Math.min(newTop, viewportHeight - windowHeight));
+
+          windowElement.style.left = `${newLeft}px`;
+          windowElement.style.top = `${newTop}px`;
+        });
+
+        document.addEventListener("mouseup", () => {
+          isDragging = false;
+        });
+      }
+
+      let isDraggingGlobal = false;
+      let currentDragElement = null;
+      let startXGlobal, startYGlobal, startLeftGlobal, startTopGlobal;
+      let isTouchEvent = false;
+
+      function dragStart(e, element) {
+        isTouchEvent = e.type === "touchstart";
+
+        if (e.target.classList.contains("close-button")) {
+          return;
+        }
+        const header =
+          element.querySelector(".sticky-note-header") ||
+          element.querySelector(".window-header");
+        if (!header.contains(e.target) && e.target !== header) {
+          return;
+        }
+
+        if (isTouchEvent) {
+          e.preventDefault();
+        }
+
+        currentDragElement = element;
+        isDraggingGlobal = true;
+
+        startXGlobal = isTouchEvent ? e.touches[0].clientX : e.clientX;
+        startYGlobal = isTouchEvent ? e.touches[0].clientY : e.clientY;
+        startLeftGlobal = currentDragElement.offsetLeft;
+        startTopGlobal = currentDragElement.offsetTop;
+
+        if (currentDragElement.classList.contains("window")) {
+          makeWindowActive(currentDragElement);
+        }
+
+        if (isTouchEvent) {
+          document.addEventListener("touchmove", dragMove, { passive: false });
+          document.addEventListener("touchend", dragEnd);
+        } else {
+          document.addEventListener("mousemove", dragMove);
+          document.addEventListener("mouseup", dragEnd);
+        }
+      }
+
+      function dragMove(e) {
+        if (!isDraggingGlobal || !currentDragElement) return;
+
+        if (isTouchEvent) {
+          e.preventDefault();
+        }
+
+        const currentX = isTouchEvent ? e.touches[0].clientX : e.clientX;
+        const currentY = isTouchEvent ? e.touches[0].clientY : e.clientY;
+
+        const dx = currentX - startXGlobal;
+        const dy = currentY - startYGlobal;
+        let newLeft = startLeftGlobal + dx;
+        let newTop = startTopGlobal + dy;
+
+        const menuBarHeight = 35;
+
+        const viewportWidth = document.documentElement.clientWidth;
+        const viewportHeight = document.documentElement.clientHeight;
+
+        const elementWidth = currentDragElement.offsetWidth;
+        const elementHeight = currentDragElement.offsetHeight;
+
+        newLeft = Math.max(0, Math.min(newLeft, viewportWidth - elementWidth));
+
+        newTop = Math.max(
+          menuBarHeight,
+          Math.min(newTop, viewportHeight - elementHeight)
+        );
+
+        currentDragElement.style.left = `${newLeft}px`;
+        currentDragElement.style.top = `${newTop}px`;
+      }
+
+      function dragEnd() {
+        isDraggingGlobal = false;
+        currentDragElement = null;
+        document.removeEventListener("mousemove", dragMove);
+        document.removeEventListener("mouseup", dragEnd);
+        document.removeEventListener("touchmove", dragMove);
+        document.removeEventListener("touchend", dragEnd);
+      }
+
+      function makeElementDraggable(element) {
+        const header =
+          element.querySelector(".sticky-note-header") ||
+          element.querySelector(".window-header");
+        if (!header) {
+          return;
+        }
+
+        header.addEventListener("mousedown", (event) => {
+          dragStart(event, element);
+        });
+        header.addEventListener(
+          "touchstart",
+          (event) => {
+            dragStart(event, element);
+          },
+          { passive: false }
+        );
+      }
+
+      function createWindow(id, title, triggerElement = null) {
+        const newWindow = document.createElement("div");
+        newWindow.classList.add("window");
+        newWindow.id = id;
+
+        let contentHTML = "";
+        if (id === "projects-window") {
+          contentHTML = `
+                <div class="folder-grid"> 
+                    <div class="project-item" tabindex="0" data-project-id="accessible-components">
+                        <img src="images/doc-icon.png" alt="Accessible Components Project" />
+                        <span class="icon-label">Accessible Components</span>
+                    </div>
+                    <div class="project-item" tabindex="0" data-project-id="personas-storyboarding">
+                        <img src="images/doc-icon.png" alt="Personas & Storyboarding Project" />
+                        <span class="icon-label">Personas & Storyboarding</span>
+                    </div>
+                    <div class="project-item" tabindex="0" data-project-id="responsive-redesign">
+                        <img src="images/doc-icon.png" alt="Responsive Redesign Project" />
+                        <span class="icon-label">Responsive Redesign</span>
+                    </div>
+                    <div class="project-item" tabindex="0" data-project-id="iterative-design">
+                        <img src="images/doc-icon.png" alt="Iterative Design Project" />
+                        <span class="icon-label">Iterative Design</span>
+                    </div>
+                </div>
+            `;
+        } else if (id === "about-window") {
+          contentHTML = `
+                <div class="about-content">
+                    <img src="images/personal-pic.png" alt="Priyam Parekh" class="about-pic">
+                    <p>Hey 👋 I'm Priyam Parekh!</p>
+                    <p>I'm a Computer Science and Entrepreneurship student at Brown University, passionate about building products people truly love. My focus is on creating memorable and effective interfaces, blending technical skill with user-centered design principles.</p>
+                    <p>With experience in full-stack development and technical consulting, I enjoy tackling complex challenges and turning ideas into practical solutions. I'm particularly excited about the potential of AI and Large Language Models (LLMs) and how they can transform entire industries.</p>
+                </div>
+             `;
+        } else if (id === "resume-window") {
+          contentHTML = `
+                <iframe 
+                    src="Priyam-Parekh-Resume-(4:29:25).pdf"
+                    title="Priyam Parekh Resume"
+                    frameborder="0"
+                    allowfullscreen
+                 ></iframe>
+                <div class="open-overlay">
+                    <a 
+                        href="Priyam-Parekh-Resume-(4:29:25).pdf" 
+                        target="_blank"
+                        class="open-link"
+                    >
+                        Open in New Window
+                    </a>
+                </div>
+             `;
+        } else if (id === "fun-window") {
+          contentHTML = `
+            <div class="fun-content">
+                <p>I enjoy exploring my creative side as a way to unwind and express ideas visually. In my free time, I find drawing and sketching particularly relaxing, allowing me to quickly capture concepts or scenes. I also love the tactile process of creating physical art like clay models, bringing tangible forms to life from simple materials. Additionally, reading offers another avenue for inspiration and expanding my perspective.</p>
+                <hr class="case-study-divider">
+                <h4>Creations:</h4>
+                <div class="fun-gallery">
+                    <figure tabindex="0">
+                        <img src="images/fun-images/clay-slice.png" alt="Clay model of a slice of cake">
+                    </figure>
+                    <figure tabindex="0">
+                        <img src="images/fun-images/clay-cake.png" alt="Clay model of a full cake">
+                    </figure>
+                    <figure tabindex="0">
+                        <img src="images/fun-images/mountain-painting.jpg" alt="Painting of mountains">
+                    </figure>
+                    <figure tabindex="0">
+                        <img src="images/fun-images/bird-drawing.png" alt="Drawing of a bird">
+                    </figure>
+                </div>
+                <p class="coming-soon-text">More coming soon...</p>
+            </div>
+          `;
+        } else if (id === "project-accessible-components-window") {
+          contentHTML = `
+                <div class="case-study-header">
+                  <h2>Understanding Search Box Accessibility</h2>
+                  <a href="https://priyam-parekh.github.io/accessible-components/" target="_blank" class="case-study-link-button">
+                    Original Case Study
+                    <img src="images/external-link-icon.png" alt="External link" class="external-link-icon">
+                  </a>
+                </div>
+                <p><strong>Role:</strong> UX Researcher & Designer (Solo Project)</p>
+                <hr class="case-study-divider">
+                <h3 id="breadcrumb-context">Context & Problem</h3>
+                <p>In modern UI design, ensuring components like search boxes are accessible to all users is crucial. This case study analyzes the accessibility of search box implementations across three well-regarded applications: Things (task manager), Notion (productivity platform), and Gmail (email service). The goal was to evaluate how effectively these popular applications cater to different input methods and accessibility needs.</p>
+                <div class="app-icons-container">
+                    <figure class="app-icon" tabindex="0">
+                        <img src="images/accessible-components-images/things-icon.png" alt="Things App Icon">
+                        <figcaption>Things (Task Manager)</figcaption>
+                    </figure>
+                    <figure class="app-icon" tabindex="0">
+                        <img src="images/accessible-components-images/notion-icon.png" alt="Notion App Icon">
+                        <figcaption>Notion (Productivity)</figcaption>
+                    </figure>
+                    <figure class="app-icon" tabindex="0">
+                        <img src="images/accessible-components-images/gmail-icon.png" alt="Gmail App Icon">
+                        <figcaption>Gmail (Email)</figcaption>
+                    </figure>
+                </div>
+
+                <h3 id="breadcrumb-input">Input Analysis: How Users Interact</h3>
+                <p>I examined interactions using mouse/touchpad, keyboard navigation, and mobile touchscreens across the three applications.</p>
+
+                <h4>Things</h4>
+                <div class="app-input-images">
+                    <figure tabindex="0">
+                        <figcaption>Mouse/Touchpad</figcaption>
+                        <img src="images/accessible-components-images/things-search.png" alt="Things search interface with mouse interaction">
+                    </figure>
+                    <figure tabindex="0">
+                        <figcaption>Keyboard</figcaption>
+                        <img src="images/accessible-components-images/things-keyboard.png" alt="Things Quick Find menu via keyboard">
+                    </figure>
+                     <figure tabindex="0">
+                        <figcaption>Mobile</figcaption>
+                        <img src="images/accessible-components-images/things-mobile.png" alt="Things search interface on mobile">
+                    </figure>
+                </div>
+                 <p>Things offered a highly intuitive magnifying glass icon (desktop) or swipe-down gesture (mobile), standard Cmd+F keyboard access, and clear visual states.</p>
+
+
+                <h4>Notion</h4>
+                 <div class="app-input-images">
+                    <figure tabindex="0">
+                        <figcaption>Mouse/Touchpad</figcaption>
+                        <img src="images/accessible-components-images/notion-mouse.png" alt="Notion search interface with mouse interaction">
+                    </figure>
+                    <figure tabindex="0">
+                        <figcaption>Keyboard</figcaption>
+                        <img src="images/accessible-components-images/notion-keyboard.png" alt="Notion search interface with keyboard interaction">
+                    </figure>
+                     <figure tabindex="0">
+                        <figcaption>Mobile</figcaption>
+                        <img src="images/accessible-components-images/notion-mobile.png" alt="Notion search interface on mobile">
+                    </figure>
+                </div>
+                <p>Notion's search was slightly hidden in a sidebar (desktop) but used a clear bottom icon (mobile). It employed Cmd+K for keyboard access and offered many suggestions, which could be overwhelming but also predictive.</p>
+
+                <h4>Gmail</h4>
+                <div class="app-input-images">
+                    <figure tabindex="0">
+                        <figcaption>Mouse/Touchpad</figcaption>
+                        <img src="images/accessible-components-images/gmail-mouse.png" alt="Gmail search interface with mouse interaction">
+                    </figure>
+                    <figure tabindex="0">
+                        <figcaption>Keyboard</figcaption>
+                        <img src="images/accessible-components-images/gmail-keyboard.png" alt="Gmail search interface with keyboard interaction">
+                    </figure>
+                     <figure tabindex="0">
+                        <figcaption>Mobile</figcaption>
+                        <img src="images/accessible-components-images/gmail-mobile.png" alt="Gmail search interface on mobile">
+                    </figure>
+                </div>
+                 <p>Gmail featured a prominent top search bar on both desktop and mobile. While lacking a direct keyboard command, standard tabbing allowed access. It provided simple suggestions and history.</p>
+            
+                <h3 id="breadcrumb-output">Output Analysis: State Representation & Accessibility</h3>
+                <p>Evaluating component output (how state changes are represented) is vital. I looked at visual cues (hover, pressed states), drag-and-drop behavior, focus order, and screen reader compatibility.</p>
+                 
+                <ul>
+                    <li><strong>Visual Cues:</strong> All apps used background color changes for pressed/selected states (blue/grey). Hover effects varied, with Notion revealing hidden controls and Gmail using shadows or background changes. Things showed an accordion icon on hover for collapsibles and outlined tags.</li>
+                    <li><strong>Drag & Drop:</strong> Things allowed task dragging to different tabs or within the page. Notion selected components on drag within a page but moved items when dragged in the sidebar. Gmail enabled dragging emails to category folders.</li>
+                    <li><strong>Focus Order:</strong> Things and Notion provided logical tab navigation through tasks/blocks and sidebar items. Gmail's tabbing covered main controls and sidebars but notably skipped iterating through individual emails.</li>
+                    <li><strong>Screen Reader:</strong> All platforms generally announced UI elements correctly: Things described tasks as tables and elements, Notion read page structure (title, icon, body) and actions, and Gmail announced folders and button text like 'Compose'.</li>
+                </ul>
+                 
+            
+                <h3 id="breadcrumb-redesign">State Models & Redesign</h3>
+                <p>To visualize interactions, I created state models for the Things search box.</p>
+                <div class="state-model-images">
+                    <figure tabindex="0">
+                        <figcaption>Mouse/Touchpad Interaction</figcaption>
+                        <img src="images/accessible-components-images/searchbox-mouse.png" alt="State model showing search box interactions with mouse">
+                    </figure>
+                    <figure tabindex="0">
+                        <figcaption>Keyboard Interaction</figcaption>
+                        <img src="images/accessible-components-images/searchbox-keyboard.png" alt="State model showing search box interactions with keyboard">
+                    </figure>
+                </div>
+                <p>I then revised these models to incorporate an intentional trade-off: adding an autocomplete feature (via double-tap or Option+Tab) for efficiency, at the potential cost of learnability.</p>
+                <div class="state-model-images">
+                     <figure tabindex="0">
+                        <figcaption>Trade-off Analysis (Mouse)</figcaption>
+                        <img src="images/accessible-components-images/trade-off-mouse.png" alt="State model showing trade-off analysis with mouse interaction">
+                    </figure>
+                     <figure tabindex="0">
+                        <figcaption>Trade-off Analysis (Keyboard)</figcaption>
+                        <img src="images/accessible-components-images/trade-off-keyboard.png" alt="State model showing trade-off analysis with keyboard interaction">
+                    </figure>
+                </div>
+                <p>Based on these models and the cross-app analysis, I proposed a redesign for the Things search box incorporating the autocomplete idea and an info icon for better shortcut discoverability.</p>
+                <figure class="redesign-image" tabindex="0">
+                     <figcaption>Component Redesign</figcaption>
+                    <img src="images/accessible-components-images/component-redesign.png" alt="Redesigned component showing improved accessibility features">
+                </figure>
+            
+                <h3 id="breadcrumb-reflection">Reflection & Learnings</h3>
+                <ul>
+                    <li>While all three platforms offered usable search components, there were clear trade-offs. Things excelled in intuitive simplicity but lagged slightly in keyboard/screen reader navigation depth compared to Gmail's general accessibility focus. Notion offered power but at the cost of potential clutter and discoverability.</li>
+                    <li>A key takeaway was the importance of discoverability for accessibility features; users can't benefit from shortcuts they don't know exist. My redesign aimed to bridge this by making common actions faster (autocomplete) while also explicitly providing guidance (info icon).</li>
+                    <li>The concept of "mismatch" (from Kat Holmes' Inclusive Design) was relevant – the redesign attempts to reduce the mismatch by allowing non-tech savvy individuals use the search box with automatic suggestions, improving discoverability, and offering multiple interaction methods to cater to both novice and power users, regardless of their primary input method.</li>
+                    <li>The accessibility considerations not fully addressed previously included discoverability (leading to the info icon) and potential efficiency gaps (leading to the autocomplete). Furthermore, the placement of Notion's search icon in the sidebar could pose a challenge for screen readers, and Gmail's drag-and-drop lacked clear visual targets for where an email could be dropped.</li>
+                    <li>Prioritizing mouse and keyboard interactions in desktop design often leads to smaller UI elements, which can negatively impact usability on touch devices where precision is lower.</li>
+                </ul>
+                
+                <div class="breadcrumb-nav"><ul></ul></div>
+             `;
+        } else if (id === "project-personas-storyboarding-window") {
+          contentHTML = `
+                <div class="case-study-header">
+                  <h2>Personas & Storyboarding</h2>
+                  <a href="https://priyam-parekh.github.io/personas-and-storyboarding/" target="_blank" class="case-study-link-button">
+                    Original Case Study
+                    <img src="images/external-link-icon.png" alt="External link" class="external-link-icon">
+                  </a>
+                </div>
+                <p><strong>Role:</strong> UX Researcher & Designer (Solo Project)</p>
+                <hr class="case-study-divider">
+
+                <h3 id="breadcrumb-context">Context</h3>
+                <p>This page explores the usability and overall user experience of a microwave interface found in a shared dorm space. Through real-life observations and 3 user interviews, the goal was to identify usability issues, understand user behavior, and create personas that relate to the perceptions of the microwave's interface.</p>
+
+                <h3 id="breadcrumb-interface">Interface</h3>
+                <p>The project is focused around a simple microwave button interface in a suite common area. The microwave is in a public space and is used by a lot of people, making it an ideal interface for observation.</p>
+                <figure class="centered-image" tabindex="0">
+                    <img src="images/personas-and-storyboarding-images/microwave-sketch.png" alt="Sketch of microwave interface with buttons and small screen.">
+                    <figcaption>Microwave interface sketch.</figcaption>
+                </figure>
+
+                <h3 id="breadcrumb-interview">Interview</h3>
+                <p>3 college students were observed and interviewed for their usage of the microwave interface.</p>
+                <h4>Questions</h4>
+                <ul>
+                    <li>When do you typically use the microwave interface?</li>
+                    <li>How often do you use it?</li>
+                    <li>How did you expect it to work before you used it the first time?</li>
+                    <li>How do you start the microwave?</li>
+                    <li>What do you do to stop the microwave before the timer ends?</li>
+                    <li>What features do you use the most often?</li>
+                    <li>Have you had trouble understanding the functionality of the buttons?</li>
+                    <li>How effective is the screen for configuring settings and viewing the timer?</li>
+                    <li>Do you prefer microwaves with dials, buttons, or a touchscreen?</li>
+                    <li>What challenges do you encounter when using the microwave interface?</li>
+                </ul>
+                <h4>Observations</h4>
+                <ul>
+                    <li>Users had difficulty opening the microwave using the button because it was hard to press, which resulted in the door being opened abruptly.</li>
+                    <li>Users had to press buttons multiple times for them to register.</li>
+                    <li>Buttons had no tactical feedback, making it harder to know whether the button registered.</li>
+                    <li>Users often just pressed the start button instead of using the other functionality and buttons.</li>
+                    <li>When the other preset functionality was used, users were unsure about how it differed from the manual settings.</li>
+                    <li>Users often had to view the timer clock up close because it was too small.</li>
+                </ul>
+                <h4>Interview Results Summary</h4>
+                <ul>
+                     <li><strong>Typical Use:</strong> Primarily reheating leftovers, making quick meals, or heating frozen snacks between classes.</li>
+                     <li><strong>Frequency:</strong> Ranged from daily to a few times a week.</li>
+                     <li><strong>Initial Expectations:</strong> Most expected a handle, not a button release; some expected more intuitive buttons.</li>
+                     <li><strong>Starting:</strong> Most use "Start +30 Sec" for speed; one uses keypad for frozen meals.</li>
+                     <li><strong>Stopping:</strong> Split between using "Pause/Off" (with some initial uncertainty) and opening the door.</li>
+                     <li><strong>Most Used Features:</strong> "Start +30 Sec" overwhelmingly preferred. Presets often avoided due to uncertainty.</li>
+                     <li><strong>Button Confusion:</strong> Presets like "Popcorn" or "Defrost" were confusing compared to manual time.</li>
+                     <li><strong>Screen Effectiveness:</strong> Universally found too small and hard to read from a distance.</li>
+                     <li><strong>Preference (Input):</strong> Buttons generally preferred (if easier to press), one preferred touchscreen.</li>
+                     <li><strong>Challenges:</strong> Hard-to-press buttons, difficult door release, small display.</li>
+                </ul>
+                
+                <h3 id="breadcrumb-personas">Personas</h3>
+                <p>Based on the interviews and observations, 2 personas were created to represent the primary users of the microwave interface.</p>
+                
+                <div class="persona-section">
+                    <div class="persona-text">
+                        <h4>Frustrated Food Warmer (John)</h4>
+                        <p><strong>Brief Description:</strong> John is a busy college student who just wants to quickly heat up his food.</p>
+                        <p><strong>Interface Problems:</strong> John struggles with the hard-to-press buttons, unclear door release mechanism, and small screen, making microwaving food incredibly frustrating.</p>
+                        <p><strong>Why This Persona Represents Users:</strong> John represents users who prioritize speed and simplicity but face usability challenges that make the microwave harder to use than expected.</p>
+                    </div>
+                     <figure class="persona-image" tabindex="0">
+                        <img src="images/personas-and-storyboarding-images/persona-1.png" alt="Visualization of persona 1: John, a frustrated food warmer.">
+                    </figure>
+                </div>
+                
+                <div class="persona-section">
+                     <div class="persona-text">
+                        <h4>Meal Prepper (Tyler)</h4>
+                        <p><strong>Brief Description:</strong> Tyler is a meal planner who wants to use the microwave's preset functions but finds them incredibly unintuitive.</p>
+                        <p><strong>Interface Problems:</strong> Tyler struggles with confusing preset options, unreliable button responsiveness, and accidentally reseting settings when manually adjusting the time.</p>
+                        <p><strong>Why This Persona Represents Users:</strong> Tyler represents users who want more control over microwaving food but are frustrated by the unclear instructions and inconsistent button feedback.</p>
+                    </div>
+                     <figure class="persona-image" tabindex="0">
+                        <img src="images/personas-and-storyboarding-images/persona-2.png" alt="Visualization of persona 2: Tyler, a meal prepper.">
+                     </figure>
+                </div>
+                
+                <h3 id="breadcrumb-storyboard">Storyboard</h3>
+                <p>A storyboard was created to visualize the user journey of the microwave interface user (Persona: John, the Frustrated Food Warmer) from start to end.</p>
+                 <figure class="centered-image" tabindex="0">
+                    <img src="images/personas-and-storyboarding-images/storyboard.png" alt="Storyboard showing user journey: approaching microwave, struggling with door, pressing start button multiple times, waiting, removing food.">
+                    <figcaption>Storyboard: A visual representation of the user journey when interacting with the microwave interface.</figcaption>
+                </figure>
+
+                <h3 id="breadcrumb-lessons">Lessons Learned</h3>
+                <p>It was interesting to see how the microwave interface was used by different users. While being fairly simple, without clear instructions, the interface became difficult to use.</p>
+                <p>Things I learned:</p>
+                <ul>
+                    <li>Users prioritize speed over extra features: users want to quickly heat up their food and often overlook the extra features.</li>
+                    <li>Minor design flaws can lead to frustrated users: a small screen and hard-to-press buttons can lead to a bad user experience.</li>
+                    <li>Users want tactile feedback: buttons should have a clear click when pressed.</li>
+                </ul>
+                
+                <div class="breadcrumb-nav"><ul></ul></div>
+           `;
+        } else if (id === "project-responsive-redesign-window") {
+          contentHTML = `
+                <div class="case-study-header">
+                  <h2>Responsive Redesign</h2>
+                  <a href="https://priyam-parekh.github.io/responsive-redesign-handin/" target="_blank" class="case-study-link-button">
+                    Original Case Study
+                    <img src="images/external-link-icon.png" alt="External link" class="external-link-icon">
+                  </a>
+                </div>
+                 <p><strong>Role:</strong> UI/UX Designer & Developer (Solo Project)</p> 
+                <hr class="case-study-divider">
+                
+                <h3 id="breadcrumb-intro">Introduction</h3>
+                <p>The <em>Friends of Benson Park</em> website plays an important role in providing information about my local park—including events, community involvement, and more. However, the website has a plethora of accessibility issues that makes it difficult to navigate for all users.</p>
+                <p>This project focuses on improving the usability, accessibility, and design of the website while maintaining the original content and structure.</p>
+                
+                <h3 id="breadcrumb-context">Context</h3>
+                <p>The Friends of Benson Park is my hometown's non-profit organization. It aims to conserve the park's history and trails. The website's main purpose is to allow people to get involved and learn more about what the Friends of Benson Park do to keep the park open to all visitors and residents.</p>
+
+                <h4>Current Website Analysis</h4>
+                <p>The original website (<a href="https://www.friendsofbensonpark.org/" target="_blank">friendsofbensonpark.org</a>) was evaluated for usability issues and accessibility problems using WebAIM WAVE.</p>
+                 <div class="image-gallery">
+                    <figure tabindex="0"><img src="images/responsive-redesign-images/fobp-1.png" alt="Friends of Benson Park website screenshot 1"></figure>
+                    <figure tabindex="0"><img src="images/responsive-redesign-images/fobp-2.png" alt="Friends of Benson Park website screenshot 2"></figure>
+                    <figure tabindex="0"><img src="images/responsive-redesign-images/fobp-3.png" alt="Friends of Benson Park website screenshot 3"></figure>
+                    <figure tabindex="0"><img src="images/responsive-redesign-images/fobp-4.png" alt="Friends of Benson Park website screenshot 4"></figure>
+                    <figure tabindex="0"><img src="images/responsive-redesign-images/fobp-5.png" alt="Friends of Benson Park website screenshot 5"></figure>
+                 </div>
+
+                <h4>Problems with Current Design</h4>
+                <p>The current website was evaluated using 4 criteria: efficiency, learnability, memorability, and the effectiveness of its conceptual model. Furthermore, the site was analyzed with the WebAIM WAVE tool to detect accessibility issues.</p>
+                <table class="problems-table">
+                    <thead>
+                        <tr>
+                            <th>Issue Category</th>
+                            <th>Usability Issues</th>
+                            <th>Explanation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Efficiency</td>
+                            <td>Unclear hierarchy of buttons<br>Inefficient navigation structure<br>Important information is hidden</td>
+                            <td>The "Donate" and "Memberships" buttons compete. Users must scroll extensively for key content (events, trails). Donation impact/trail info are far down.</td>
+                        </tr>
+                        <tr>
+                            <td>Learnability</td>
+                            <td>Lack of clear visual differentiation<br>Text readability issues<br>Illegible form fields</td>
+                            <td>No clear distinction between sections. Sections like "Family Fun Day Photos" lack context. Text overlays lack contrast. Form fields have poor contrast/size.</td>
+                        </tr>
+                        <tr>
+                            <td>Memorability</td>
+                            <td>Subpar visual consistency<br>Oversaturated background images</td>
+                            <td>Inconsistent font sizes/styles. Vibrant background images are overwhelming and hinder section recall.</td>
+                        </tr>
+                        <tr>
+                            <td>Conceptual Model</td>
+                            <td>Misaligned information priority<br>Unintuitive navigation<br>Unclear visual hierarchy</td>
+                            <td>Expected non-profit info (mission, impact) isn't prominent. Key info is scattered, forcing scrolling. Sections blend without clear hierarchy; saturated images add clutter.</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>WebAIM WAVE Results Analysis</h4>
+                <p>The WebAIM WAVE analysis confirmed significant accessibility problems. Notably, none of the images had alt-text, a finding that was discovered through VoiceOver testing. Approximately 15 contrast errors were detected due to text/image combinations (white on saturated images, dark gray on light gray, red on white). The site required a major overhaul for accessibility.</p>
+
+                <h3 id="breadcrumb-redesign">The Redesign Process</h3>
+                <p>Based on the usability evaluation and accessibility analysis, I created a redesign addressing these issues while maintaining the website's core functionality.</p>
+                
+                <h4>Visual Design Style Guide</h4>
+                <p>To ensure consistency and accessibility, I developed a visual style guide including the color palette, typography, and reusable components.</p>
+                 <figure class="centered-image" tabindex="0">
+                    <img src="images/responsive-redesign-images/style-guide.png" alt="Visual design style guide showing color palette, typography, and UI components">
+                    <figcaption>Visual design style guide.</figcaption>
+                </figure>
+
+                <h4>Mockups</h4>
+                <p>I created responsive mockups for desktop, tablet, and mobile screen sizes, annotating key elements and layout choices.</p>
+                <div class="mockup-links">
+                     <figure tabindex="0" class="mockup-iframe-figure">
+                        <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/proto/pzLHmYdX1IRlmjmPMDOBGR/CS-1300-Responsive-Redesign?page-id=14%3A10&node-id=14-15&p=f&viewport=477%2C23%2C0.12&scaling=scale-down&content-scaling=fixed&embed-host=share" allowfullscreen></iframe>
+                    </figure>
+                     <figure tabindex="0" class="mockup-iframe-figure">
+                        <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/proto/pzLHmYdX1IRlmjmPMDOBGR/CS-1300-Responsive-Redesign?page-id=14%3A11&node-id=14-259&p=f&viewport=434%2C24%2C0.19&scaling=scale-down&content-scaling=fixed&embed-host=share" allowfullscreen></iframe>
+                     </figure>
+                     <figure tabindex="0" class="mockup-iframe-figure">
+                         <iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/proto/pzLHmYdX1IRlmjmPMDOBGR/CS-1300-Responsive-Redesign?page-id=14%3A12&node-id=21-537&p=f&viewport=479%2C25%2C0.14&scaling=scale-down&content-scaling=fixed&embed-host=share" allowfullscreen></iframe>
+                    </figure>
+                </div>
+                <p>Annotated mockups detailing layout choices:</p>
+                <div class="mockup-links">
+                    <figure tabindex="0">
+                         <a href="https://drive.google.com/file/d/1iFwVcNkbS_pN-mScJwmVgrP0V9xhKHup/view?usp=sharing" target="_blank">
+                        <img src="images/responsive-redesign-images/annotated-desktop.png" alt="Annotated desktop version mockup">
+                         Annotated Desktop</a>
+                    </figure>
+                    <figure tabindex="0">
+                         <a href="https://drive.google.com/file/d/1iR9hQhXroq4qG-eHiYqSQAConyTF_cJc/view?usp=sharing" target="_blank">
+                        <img src="images/responsive-redesign-images/annotated-tablet.png" alt="Annotated tablet version mockup">
+                         Annotated Tablet</a>
+                    </figure>
+                    <figure tabindex="0" class="mockup-phone">
+                         <a href="https://drive.google.com/file/d/1JCI75PS16b0CZFbS7ZGchv9HkHGBmIUh/view?usp=sharing" target="_blank">
+                        <img src="images/responsive-redesign-images/annotated-phone.png" alt="Annotated mobile version mockup">
+                        Annotated Phone</a>
+                    </figure>
+                </div>
+                
+                <h3 id="breadcrumb-final">The Result</h3>
+                <p>Using the analysis and designs, I developed the improved website below, which is more user-friendly, accessible, and visually appealing across different screen sizes. You can interact with it directly here👇:</p>
+                <iframe 
+                    src="https://priyam-parekh.github.io/redesigned-benson-park-website/" 
+                    title="Redesigned Friends of Benson Park website" 
+                    class="embedded-website"
+                 ></iframe>
+
+                <h3 id="breadcrumb-learnings">Key Learnings</h3>
+                <ul>
+                    <li><strong>Accessibility is Crucial:</strong> Tools like WebAIM WAVE highlight critical issues (contrast, alt text) often missed in visual design. Addressing these significantly improves usability for all.</li>
+                    <li><strong>Consistency Matters:</strong> Developing a style guide early ensures a cohesive visual language across the site and simplifies development.</li>
+                    <li><strong>Responsive Design Requires Planning:</strong> Creating mockups for different screen sizes forces consideration of layout shifts and element adaptations, leading to a more robust final product.</li>
+                     <li><strong>Iterative Process:</strong> Redesign isn't just about aesthetics; it involves analyzing problems, proposing solutions (mockups), and implementing them technically, often requiring adjustments along the way.</li>
+                </ul>
+
+                <div class="breadcrumb-nav"><ul></ul></div>
+           `;
+        } else if (id === "project-iterative-design-window") {
+          contentHTML = `
+                <div class="case-study-header">
+                  <h2>Iterative Design & Evaluation</h2>
+                   
+                </div>
+                 <p><strong>Team:</strong> Ethan Wei, Sarah Ridley, Priyam Parekh, Zeeshan Bhalwani</p>
+                 <p><strong>My Role:</strong> Initial Sketches, Lo-Fi Wireframing (Balsamiq), Hi-Fi Mockup (Reserve Charging Page), User Testing Interview</p> 
+                <hr class="case-study-divider">
+                
+                <h3 id="breadcrumb-intro">Introduction</h3>
+                <h4>Curo - Connecting EV Fleets & Charger Depots</h4>
+                <p>In this case study, our group developed design and critique skills by iteratively creating digital interfaces for Curo, a Y Combinator startup. Curo's mission is to connect electric vehicle (EV) fleet managers and charger depot owners to utilize charger downtime effectively.</p>
+                <p>Imagine an Amazon regional manager needing more chargers for their electric delivery fleet, and a grocery store owner with EV chargers unused overnight. Curo facilitates a connection where the fleet manager finds affordable charging, and the depot owner earns revenue from leasing chargers during off-hours.</p>
+                <h4>Our Approach</h4>
+                <p>We designed Curo's platform independently, avoiding their existing interfaces. Our process involved:</p>
+                <ul>
+                    <li>Initial individual sketching (desktop/mobile concepts).</li>
+                    <li>Collaborative Lo-Fi wireframing using Balsamiq.</li>
+                    <li>Critique and iteration based on peer and expert feedback.</li>
+                    <li>Developing an interactive Hi-Fi prototype in Figma.</li>
+                    <li>Conducting usability testing on the Hi-Fi prototype.</li>
+                </ul>
+                
+                <h3 id="breadcrumb-sketches">Initial Sketches and Ideation</h3>
+                <h4>Sketching Approach</h4>
+                <p>Each team member independently sketched 3+ screens exploring different UI visions (desktop vs. mobile) for Curo's core functionality. This independent ideation fostered diverse design ideas before converging on shared elements for the wireframes.</p>
+                
+                <div class="sketch-gallery">
+                    <h4>Priyam's Sketches (Map/Card Views & Depot Signup)</h4>
+                    <p><em>My first screen is a map view that helps fleet managers search for and locate available chargers. It features a central map with a scrollable overlay of charger listings on the left, a search bar at the top, and a collapsible vertical navigation bar on the far left. The second screen is a standard card view that removes the map, allowing fleet managers to quickly scroll through all chargers available to lease. The third screen is targeted toward depot owners and showcases the signup process to add an EV charger to the platform. This includes fields for contact information, charger type, quantity, and location details.</em></p>
+                    <div class="gallery-row">
+                        <figure tabindex="0"><img src="images/iterative-design-images/map-view-priyam.jpeg" alt="Priyam's Map View Sketch"></figure>
+                        <figure tabindex="0"><img src="images/iterative-design-images/card-view-priyam.jpeg" alt="Priyam's Card View Sketch"></figure>
+                        <figure tabindex="0"><img src="images/iterative-design-images/add-ev-charger-priyam.jpeg" alt="Priyam's Add EV Charger Sketch"></figure>
+                    </div>
+                </div>
+
+                <div class="sketch-gallery">
+                    <h4>Sarah's Sketches (Signup Flow)</h4>
+                    <div class="gallery-row">
+                         <figure tabindex="0"><img src="images/iterative-design-images/Sarah-Screen1-Signup.png" alt="Sarah's Signup Sketch"></figure>
+                         <figure tabindex="0"><img src="images/iterative-design-images/Sarah-Screen2-FleetManager.png" alt="Sarah's Fleet Manager View Sketch"></figure>
+                         <figure tabindex="0"><img src="images/iterative-design-images/Sarah-Screen3-ChargerOwner1.png" alt="Sarah's Charger Owner View 1 Sketch"></figure>
+                         <figure tabindex="0"><img src="images/iterative-design-images/Sarah-Screen4-ChargerOwner2.png" alt="Sarah's Charger Owner View 2 Sketch"></figure>
+                    </div>
+                    <p><em>Focused on desktop sign-up flow, fleet management view, and charger owner views (leasing management).</em></p>
+                </div>
+                 <div class="sketch-gallery">
+                    <h4>Ethan's Sketches (Driver/Fleet Manager Focus)</h4>
+                     <figure class="centered-image single-image" tabindex="0">
+                        <img src="images/iterative-design-images/ethan-sketches.jpeg" alt="Ethan's Design Sketches">
+                     </figure>
+                     <p><em>Centered around driver/fleet manager mobile experience, reminiscent of map apps with pinned locations, vehicle tracking, and charging details.</em></p>
+                </div>
+                 <div class="sketch-gallery">
+                    <h4>Zeeshan's Sketches (Mobile Flow Focus)</h4>
+                    <figure class="centered-image single-image" tabindex="0">
+                        <img src="images/iterative-design-images/zeeshan-sketches.jpeg" alt="Zeeshan's Design Sketches">
+                     </figure>
+                     <p><em>Focused on mobile sign-in, charger search for fleet managers, and charger management/decommissioning for depot owners.</em></p>
+                 </div>
+
+                <h3 id="breadcrumb-lofi">Lo-Fi Prototypes and Wireframes</h3>
+                <h4>Wireframing Approach</h4>
+                <p>We synthesized our sketch ideas into a cohesive Lo-Fi prototype using Balsamiq, focusing on key pages for both Fleet Managers and Depot Owners.</p>
+                
+                <div class="lofi-screens">
+                    <figure tabindex="0">
+                        <figcaption>Screen 1: Sign-In/Sign-Up Page</figcaption>
+                        <img src="images/iterative-design-images/screen1.png" alt="Sign-In/Sign-Up Page wireframe">
+                        <p>Goal: Intuitive sign-in/up for both user types using a simple card layout.</p>
+                    </figure>
+                     <figure tabindex="0">
+                        <figcaption>Screen 2: Fleet View Page (Fleet Manager)</figcaption>
+                        <img src="images/iterative-design-images/screen2.png" alt="Fleet View Page wireframe">
+                         <p>Goal: Simple, comprehensive view to locate fleet and check charging status (map + sidebar card view).</p>
+                   </figure>
+                   <figure tabindex="0">
+                        <figcaption>Screen 3: Charging Options (Fleet Manager)</figcaption>
+                        <img src="images/iterative-design-images/screen3.png" alt="Charging Options Page wireframe">
+                        <p>Goal: Locate compatible chargers, view details, and reserve (map + sidebar card view, consistent with Fleet View).</p>
+                    </figure>
+                    <figure tabindex="0">
+                        <figcaption>Screen 4: Dashboard (Depot Owner)</figcaption>
+                        <img src="images/iterative-design-images/screen4.png" alt="Dashboard Page wireframe">
+                        <p>Goal: Clean dashboard for managing depots via Bento Grid layout (quick actions, earnings, requests).</p>
+                    </figure>
+                </div>
+
+                <h4>Peer & Expert Feedback</h4>
+                <p>We iterated based on feedback from each other and from interaction designer Audrey Chou during a critique session:</p>
+                <ul>
+                    <li><strong>Peer Feedback Incorporated:</strong> Added robust in-app messaging (more visible), made sidebars collapsible, introduced mirrored views for depot owners (consistency), surfaced key data earlier (availability, reserved slots).</li>
+                    <li><strong>Critique Feedback Incorporated:</strong> Ensured consistent design patterns, added filtering capabilities, reorganized dashboard grid (more compact), added contextual descriptions to clarify components.</li>
+                </ul>
+
+                <h3 id="breadcrumb-hifi">Hi-Fi Prototype</h3>
+                <p>We translated the refined wireframes into an interactive Hi-Fi prototype in Figma, focusing on a unified brand identity and UI best practices. We balanced critique feedback (surfacing more info upfront) with maintaining a relatively minimal interface until users interact for more details. Visual consistency across personas and essential features like messaging were key additions.</p>
+                <h4>Figma Prototype</h4>
+                 <div class="iframe-container">
+                     <iframe style="border: none;" width="800" height="450" src="https://embed.figma.com/proto/CIIizX9Wve7DCsOqA9qCHL/CS1300--Curo-Design?page-id=0%3A1&node-id=9-2&p=f&scaling=scale-down&starting-point-node-id=9%3A2&embed-host=share" allowfullscreen></iframe>
+                 </div>
+                <h4>Loom Demo Video</h4>
+                <p><a href="https://www.loom.com/share/0d9df309f1f641dc96044be0cb168bca?sid=af04b5e8-99ea-481b-a4bb-2b762cd42ed9" target="_blank">Link to Loom Demo</a> (Note: Embedding directly might not work consistently, providing link).</p>
+                
+                <h4>Design Rationale</h4>
+                <p>Our UI centers on an onboarding flow diverging by persona (inspired by platforms like Fiverr). Depot owners get a dashboard for managing requests, availability, and stats. Fleet managers get a map-focused view for finding and reserving chargers, plus vehicle tracking. Both have messaging capabilities.</p>
+
+                <h3 id="breadcrumb-testing">User Testing</h3>
+                <h4>User Testing Approach</h4>
+                <p>We conducted usability tests with our Hi-Fi prototype. Each team member tested one user. The core task was: <em>Log in as a depot owner and accept a reservation request.</em></p>
+                <h4>Questions Asked</h4>
+                <ul>
+                    <li>(Pre-test) Expectations for sign-in? Expected info/steps for accepting requests?</li>
+                    <li>(Post-test) Confusion finding requests? Adequate info provided? Intuitive communication options? Confidence in reservation being respected? Similarity to expectations?</li>
+                </ul>
+                 <h4>My User Test (Priyam)</h4>
+                 <div class="iframe-container">
+                    <iframe 
+                        src="https://www.loom.com/embed/0d9df309f1f641dc96044be0cb168bca?sid=af04b5e8-99ea-481b-a4bb-2b762cd42ed9" 
+                        frameborder="0" 
+                        webkitallowfullscreen 
+                        mozallowfullscreen 
+                        allowfullscreen
+                        >
+                    </iframe>
+                 </div>
+                 <p><strong>Observations:</strong> User expected standard sign-in. Logged in as depot owner correctly. Scanned dashboard cards, quickly found Reservation Request card. Clicked first request and accepted quickly without deep review.</p>
+                 <p><strong>Insights:</strong> The core flow of finding and accepting a reservation is intuitive. However, the directed nature of the task (being told to accept) meant the user didn't deeply engage with the information provided in the request details, limiting feedback on informational adequacy.</p>
+
+                <h4>Summary of Other User Tests (Ethan, Sarah, Zeeshan)</h4>
+                <ul>
+                    <li><strong>Common Findings:</strong> Generally, users found the sign-in and reservation acceptance flow straightforward and easy to navigate. The dashboard layout was understood.</li>
+                    <li><strong>Areas for Improvement:</strong> 
+                        <ul>
+                            <li>Some uncertainty about the number of available charging slots vs. requested slots on the request card.</li>
+                            <li>In-app messaging wasn't immediately discoverable for some; suggestion to integrate it more directly into the request popup.</li>
+                            <li>Desire for more context/information before accepting (though this varied).</li>
+                             <li>Suggestion to allow editing/canceling an accepted reservation.</li>
+                             <li>Potential to make the Reservation Request card more prominent if maximizing acceptances is a key goal.</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3 id="breadcrumb-lessons">Lessons Learned</h3>
+                <h4>Priyam:</h4>
+                <ul>
+                    <li><strong>Iterative Design Value:</strong> Moving from broad individual sketches (exploring map views, card views, and sign-up flows) to collaborative Balsamiq wireframes and finally to a detailed Figma prototype highlighted how crucial each stage is for refining ideas and catching potential issues early.</li> 
+                    <li><strong>Cross-Persona Design:</strong> Designing screens for both Fleet Managers (map/card view) and Depot Owners (charger sign-up) required careful consideration of distinct user needs and workflows within the same platform.</li>
+                    <li><strong>Tooling Insights:</strong> Using Balsamiq for Lo-Fi allowed rapid functional layout exploration, while Figma enabled detailed visual design, component creation, and interactive prototyping, showcasing the different strengths of each tool.</li>
+                    <li><strong>User Testing Nuances:</strong> Conducting the user test revealed the importance of task phrasing. While the test confirmed the reservation acceptance flow was intuitive, the directive nature of the prompt limited feedback on the adequacy of information presented in the request details.</li>
+                    <li><strong>Collaborative Synthesis:</strong> Integrating diverse sketch ideas and incorporating peer/expert critique into the wireframes and Hi-Fi prototype was essential for creating a more cohesive and user-centered final design, demonstrating the value of team feedback loops.</li>
+                </ul>
+
+                <div class="breadcrumb-nav"><ul></ul></div>
+           `;
+        }
+
+        newWindow.innerHTML = `
+          <div class="window-header">
+            <div class="window-controls">
+              <button class="close-button"></button>
+            </div>
+            <div class="title-bar">
+              <div class="title">${title}</div>
+              <div class="title-stripes"></div>
+            </div>
+          </div>
+          <div class="window-content">
+            ${contentHTML}
+          </div>
+        `;
+
+        const existingWindows = document.querySelectorAll(".window").length;
+        const offset = 30;
+        newWindow.style.left = `${50 + (existingWindows % 10) * offset}px`;
+        newWindow.style.top = `${50 + (existingWindows % 10) * offset}px`;
+
+        const container = document.querySelector(".desktop-content");
+        const desktopIcons = container.querySelector(".desktop-icons");
+        const firstOtherWindow = container.querySelector(
+          ".window:not(#portfolio-window)"
+        );
+        const referenceNode = firstOtherWindow || desktopIcons;
+
+        container.insertBefore(newWindow, referenceNode);
+
+        if (id.startsWith("project-") && id.endsWith("-window")) {
+          const windowContent = newWindow.querySelector(".window-content");
+          const breadcrumbNav =
+            windowContent.querySelector(".breadcrumb-nav ul");
+          const headings = windowContent.querySelectorAll(
+            'h3[id^="breadcrumb-"]'
+          );
+          let breadcrumbLinks = [];
+
+          if (breadcrumbNav && headings.length > 0) {
+            windowContent.style.position = "relative";
+
+            headings.forEach((heading) => {
+              const headingId = heading.id;
+              const headingText = heading.textContent.split(":")[0];
+              const listItem = document.createElement("li");
+              const link = document.createElement("a");
+              link.href = `#${headingId}`;
+              link.textContent = headingText;
+              link.onclick = (e) => {
+                e.preventDefault();
+                heading.scrollIntoView({ behavior: "smooth" });
+              };
+              listItem.appendChild(link);
+              breadcrumbNav.appendChild(listItem);
+              breadcrumbLinks.push({ linkElement: link, targetId: headingId });
+            });
+
+            const handleScroll = () => {
+              let currentActiveFound = false;
+              const scrollPos = windowContent.scrollTop;
+              const containerHeight = windowContent.clientHeight;
+              const scrollBottom = scrollPos + containerHeight;
+              const totalScrollHeight = windowContent.scrollHeight;
+              const buffer = 50;
+              const bottomThreshold = 5;
+
+              breadcrumbLinks.forEach((l) =>
+                l.linkElement.classList.remove("active-breadcrumb")
+              );
+
+              for (let i = headings.length - 1; i >= 0; i--) {
+                const heading = headings[i];
+                const sectionTop = heading.offsetTop - buffer;
+                const linkData = breadcrumbLinks.find(
+                  (l) => l.targetId === heading.id
+                );
+                if (!linkData) continue;
+
+                if (scrollPos >= sectionTop) {
+                  linkData.linkElement.classList.add("active-breadcrumb");
+                  currentActiveFound = true;
+                  break;
+                }
+              }
+
+              if (
+                scrollBottom >= totalScrollHeight - bottomThreshold &&
+                breadcrumbLinks.length > 0
+              ) {
+                breadcrumbLinks.forEach((l) =>
+                  l.linkElement.classList.remove("active-breadcrumb")
+                );
+                breadcrumbLinks[
+                  breadcrumbLinks.length - 1
+                ].linkElement.classList.add("active-breadcrumb");
+                currentActiveFound = true;
+              } else if (
+                scrollPos < buffer &&
+                breadcrumbLinks.length > 0 &&
+                !currentActiveFound
+              ) {
+                breadcrumbLinks[0].linkElement.classList.add(
+                  "active-breadcrumb"
+                );
+                currentActiveFound = true;
+              } else if (!currentActiveFound && breadcrumbLinks.length > 0) {
+                breadcrumbLinks[0].linkElement.classList.add(
+                  "active-breadcrumb"
+                );
+              }
+            };
+
+            windowContent.addEventListener("scroll", handleScroll);
+            handleScroll();
+
+            newWindow.breadcrumbScrollListener = handleScroll;
+            newWindow.breadcrumbScrollElement = windowContent;
+          }
+        }
+
+        const closeButton = newWindow.querySelector(".close-button");
+        closeButton.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (newWindow.breadcrumbScrollListener) {
+            newWindow.breadcrumbScrollElement.removeEventListener(
+              "scroll",
+              newWindow.breadcrumbScrollListener
+            );
+          }
+          newWindow.remove();
+          if (triggerElement) {
+            triggerElement.classList.remove("inactive");
+          }
+        });
+
+        if (id === "projects-window") {
+          newWindow.querySelectorAll(".project-item").forEach((item) => {
+            item.addEventListener("dblclick", () => openProjectWindow(item));
+            item.addEventListener("click", () => openProjectWindow(item));
+            item.addEventListener("keydown", (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openProjectWindow(item);
+              }
+            });
+          });
+        }
+
+        newWindow.addEventListener("mousedown", () =>
+          makeWindowActive(newWindow)
+        );
+        makeElementDraggable(newWindow);
+        makeWindowActive(newWindow);
+
+        return newWindow;
+      }
+
+      function openProjectWindow(projectItemElement) {
+        const projectId = projectItemElement.dataset.projectId;
+        const projectTitle =
+          projectItemElement.querySelector(".icon-label").textContent;
+        const windowId = `project-${projectId}-window`;
+
+        if (!document.getElementById(windowId)) {
+          createWindow(windowId, projectTitle);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const initialWindow = document.getElementById("portfolio-window");
+        const hardDriveIcon = document.getElementById("harddrive");
+        const aboutFolder = document.querySelector(
+          '.folder-item img[alt="About Folder"]'
+        ).parentElement;
+        const projectsFolder = document.querySelector(
+          '.folder-item img[alt="Projects Folder"]'
+        ).parentElement;
+        const resumeItem = document.querySelector(
+          '.folder-item img[alt="Resume Document"]'
+        ).parentElement;
+        const funFolder = document.querySelector(
+          '.folder-item img[alt="Fun Folder"]'
+        ).parentElement;
+        const trashIconDiv = document.getElementById("trash");
+        const trashIconImg = trashIconDiv.querySelector("img");
+        const stickyNote = document.getElementById("tagline-note");
+
+        makeWindowActive(initialWindow);
+        makeElementDraggable(initialWindow);
+        initialWindow.addEventListener("mousedown", () =>
+          makeWindowActive(initialWindow)
+        );
+        initialWindow
+          .querySelector(".close-button")
+          .addEventListener("click", (e) => {
+            e.stopPropagation();
+            initialWindow.style.display = "none";
+            hardDriveIcon.classList.add("inactive");
+            hardDriveIcon.setAttribute(
+              "title",
+              "Reopen Priyam's Portfolio HD window"
+            );
+          });
+        hardDriveIcon.addEventListener("click", () => {
+          initialWindow.style.display = "block";
+          makeWindowActive(initialWindow);
+          hardDriveIcon.classList.remove("inactive");
+          hardDriveIcon.removeAttribute("title");
+          if (!initialWindow.style.left) {
+            initialWindow.style.left = "50px";
+            initialWindow.style.top = "50px";
+          }
+        });
+        hardDriveIcon.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            hardDriveIcon.click();
+          }
+        });
+
+        makeElementDraggable(stickyNote);
+
+        function openFolder(folderElement) {
+          if (folderElement === aboutFolder) {
+            if (!document.getElementById("about-window")) {
+              createWindow("about-window", "About");
+            } else {
+              const existingWindow = document.getElementById("about-window");
+              makeWindowActive(existingWindow);
+            }
+          } else if (folderElement === projectsFolder) {
+            if (!document.getElementById("projects-window")) {
+              createWindow("projects-window", "Projects");
+            } else {
+              const existingWindow = document.getElementById("projects-window");
+              makeWindowActive(existingWindow);
+            }
+          } else if (folderElement === resumeItem) {
+            if (!document.getElementById("resume-window")) {
+              createWindow("resume-window", "Resume");
+            } else {
+              const existingWindow = document.getElementById("resume-window");
+              makeWindowActive(existingWindow);
+            }
+          } else if (folderElement === funFolder) {
+            if (!document.getElementById("fun-window")) {
+              createWindow("fun-window", "Fun");
+            } else {
+              const existingWindow = document.getElementById("fun-window");
+              makeWindowActive(existingWindow);
+            }
+          }
+        }
+
+        aboutFolder.addEventListener("dblclick", () => openFolder(aboutFolder));
+        projectsFolder.addEventListener("dblclick", () =>
+          openFolder(projectsFolder)
+        );
+        resumeItem.addEventListener("dblclick", () => openFolder(resumeItem));
+        funFolder.addEventListener("dblclick", () => openFolder(funFolder));
+
+        aboutFolder.addEventListener("click", () => openFolder(aboutFolder));
+        projectsFolder.addEventListener("click", () =>
+          openFolder(projectsFolder)
+        );
+        resumeItem.addEventListener("click", () => openFolder(resumeItem));
+        funFolder.addEventListener("click", () => openFolder(funFolder));
+
+        [aboutFolder, projectsFolder, resumeItem, funFolder].forEach((item) => {
+          item.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              openFolder(item);
+            }
+          });
+        });
+
+        trashIconDiv.addEventListener("click", () => {
+          if (trashIconImg.src.includes("trash-icon.png")) {
+            trashIconImg.src = "images/trash-icon-toppled.png";
+          }
+
+          document.querySelectorAll(".window").forEach((win) => {
+            if (win.id !== "portfolio-window") {
+              if (win.breadcrumbScrollListener) {
+                win.breadcrumbScrollElement.removeEventListener(
+                  "scroll",
+                  win.breadcrumbScrollListener
+                );
+              }
+              win.remove();
+            }
+          });
+        });
+        trashIconDiv.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            trashIconDiv.click();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

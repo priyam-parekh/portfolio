@@ -12,7 +12,21 @@
         <img src="images/face-icon.png" alt="Face Icon" />
       </div>
       <ul class="menu-items">
-        <li id="menu-item-name">Priyam Parekh</li>
+        <li id="menu-item-name">
+          Priyam Parekh
+          <div class="menu-popup" id="name-popup">
+            <strong>Why this UI?</strong>
+            <p>
+              Basing it off the tagline "Building products people love", people
+              loved the Macintosh, being a pioneer in great product design and
+              UI. With that theme in mind, I designed my portfolio to resemble
+              the Macintosh IIGS interface which is known for having advanced
+              graphics capabilities at the time. Many of its design
+              principles/style can still be found on the modern macOS, showing
+              its long-lasting impact on user interfaces and experiences.
+            </p>
+          </div>
+        </li>
         <li id="menu-item-email">
           <a href="mailto:priyamaparekh@gmail.com">Email</a>
         </li>
@@ -310,19 +324,19 @@
             <div class="fun-content">
                 <p>I enjoy exploring my creative side as a way to unwind and express ideas visually. In my free time, I find drawing and sketching particularly relaxing, allowing me to quickly capture concepts or scenes. I also love the tactile process of creating physical art like clay models, bringing tangible forms to life from simple materials. Additionally, reading offers another avenue for inspiration and expanding my perspective.</p>
                 <hr class="case-study-divider">
-                <h4>Creations:</h4>
+                <h4>Things I've made:</h4>
                 <div class="fun-gallery">
-                    <figure tabindex="0">
-                        <img src="images/fun-images/clay-slice.png" alt="Clay model of a slice of cake">
-                    </figure>
-                    <figure tabindex="0">
-                        <img src="images/fun-images/clay-cake.png" alt="Clay model of a full cake">
-                    </figure>
                     <figure tabindex="0">
                         <img src="images/fun-images/mountain-painting.jpg" alt="Painting of mountains">
                     </figure>
                     <figure tabindex="0">
                         <img src="images/fun-images/bird-drawing.png" alt="Drawing of a bird">
+                    </figure>
+                    <figure tabindex="0">
+                        <img src="images/fun-images/clay-slice.png" alt="Clay model of a slice of cake">
+                    </figure>
+                    <figure tabindex="0">
+                        <img src="images/fun-images/clay-cake.png" alt="Clay model of a full cake">
                     </figure>
                 </div>
                 <p class="coming-soon-text">More coming soon...</p>
@@ -340,7 +354,7 @@
                 <p><strong>Role:</strong> UX Researcher & Designer (Solo Project)</p>
                 <hr class="case-study-divider">
                 <h3 id="breadcrumb-context">Context & Problem</h3>
-                <p>In modern UI design, ensuring components like search boxes are accessible to all users is crucial. This case study analyzes the accessibility of search box implementations across three well-regarded applications: Things (task manager), Notion (productivity platform), and Gmail (email service). The goal was to evaluate how effectively these popular applications cater to different input methods and accessibility needs.</p>
+                <p>In modern UI design, ensuring components like search boxes are accessible to all users is crucial. This case study analyzes the accessibility of search box implementations across three well-regarded applications: Things (task manager), Notion (productivity platform), and Gmail (email service). The goal was to evaluate how effectively these applications cater to different input methods and accessibility needs.</p>
                 <div class="app-icons-container">
                     <figure class="app-icon" tabindex="0">
                         <img src="images/accessible-components-images/things-icon.png" alt="Things App Icon">
@@ -392,7 +406,7 @@
                         <img src="images/accessible-components-images/notion-mobile.png" alt="Notion search interface on mobile">
                     </figure>
                 </div>
-                <p>Notion's search was slightly hidden in a sidebar (desktop) but used a clear bottom icon (mobile). It employed Cmd+K for keyboard access and offered many suggestions, which could be overwhelming but also predictive.</p>
+                <p>Notion's search was slightly hidden in a sidebar (desktop) but used a clear bottom icon (mobile). It used Cmd+K for keyboard and offered many suggestions, which could be overwhelming.</p>
 
                 <h4>Gmail</h4>
                 <div class="app-input-images">
@@ -409,15 +423,15 @@
                         <img src="images/accessible-components-images/gmail-mobile.png" alt="Gmail search interface on mobile">
                     </figure>
                 </div>
-                 <p>Gmail featured a prominent top search bar on both desktop and mobile. While lacking a direct keyboard command, standard tabbing allowed access. It provided simple suggestions and history.</p>
+                 <p>Gmail featured a prominent top search bar on both desktop and mobile. While lacking a direct keyboard command, standard tabbing could be used. It provided simple suggestions and history.</p>
             
                 <h3 id="breadcrumb-output">Output Analysis: State Representation & Accessibility</h3>
-                <p>Evaluating component output (how state changes are represented) is vital. I looked at visual cues (hover, pressed states), drag-and-drop behavior, focus order, and screen reader compatibility.</p>
+                <p>Evaluating component output (how state changes are represented) was important. I looked at visual cues (hover, pressed states), drag-and-drop behavior, focus order, and screen reader compatibility.</p>
                  
                 <ul>
                     <li><strong>Visual Cues:</strong> All apps used background color changes for pressed/selected states (blue/grey). Hover effects varied, with Notion revealing hidden controls and Gmail using shadows or background changes. Things showed an accordion icon on hover for collapsibles and outlined tags.</li>
                     <li><strong>Drag & Drop:</strong> Things allowed task dragging to different tabs or within the page. Notion selected components on drag within a page but moved items when dragged in the sidebar. Gmail enabled dragging emails to category folders.</li>
-                    <li><strong>Focus Order:</strong> Things and Notion provided logical tab navigation through tasks/blocks and sidebar items. Gmail's tabbing covered main controls and sidebars but notably skipped iterating through individual emails.</li>
+                    <li><strong>Focus Order:</strong> Things and Notion provided logical tab navigation through tasks/blocks and sidebar items. Gmail's tabbing covered main controls and sidebars but skipped iterating through individual emails.</li>
                     <li><strong>Screen Reader:</strong> All platforms generally announced UI elements correctly: Things described tasks as tables and elements, Notion read page structure (title, icon, body) and actions, and Gmail announced folders and button text like 'Compose'.</li>
                 </ul>
                  
@@ -445,7 +459,7 @@
                         <img src="images/accessible-components-images/trade-off-keyboard.png" alt="State model showing trade-off analysis with keyboard interaction">
                     </figure>
                 </div>
-                <p>Based on these models and the cross-app analysis, I proposed a redesign for the Things search box incorporating the autocomplete idea and an info icon for better shortcut discoverability.</p>
+                <p>Based on these models and the app analysis, I proposed a redesign for the Things search box incorporating the autocomplete idea and an info icon for better shortcut discoverability.</p>
                 <figure class="redesign-image" tabindex="0">
                      <figcaption>Component Redesign</figcaption>
                     <img src="images/accessible-components-images/component-redesign.png" alt="Redesigned component showing improved accessibility features">
@@ -455,9 +469,8 @@
                 <ul>
                     <li>While all three platforms offered usable search components, there were clear trade-offs. Things excelled in intuitive simplicity but lagged slightly in keyboard/screen reader navigation depth compared to Gmail's general accessibility focus. Notion offered power but at the cost of potential clutter and discoverability.</li>
                     <li>A key takeaway was the importance of discoverability for accessibility features; users can't benefit from shortcuts they don't know exist. My redesign aimed to bridge this by making common actions faster (autocomplete) while also explicitly providing guidance (info icon).</li>
-                    <li>The concept of "mismatch" (from Kat Holmes' Inclusive Design) was relevant – the redesign attempts to reduce the mismatch by allowing non-tech savvy individuals use the search box with automatic suggestions, improving discoverability, and offering multiple interaction methods to cater to both novice and power users, regardless of their primary input method.</li>
+                    <li>The concept of mismatch was relevant – the redesign attempts to reduce the mismatch by allowing non-tech savvy individuals to use the search box with automatic suggestions, improving discoverability, and offering multiple interaction methods to cater to both novice and power users, regardless of their primary input method.</li>
                     <li>The accessibility considerations not fully addressed previously included discoverability (leading to the info icon) and potential efficiency gaps (leading to the autocomplete). Furthermore, the placement of Notion's search icon in the sidebar could pose a challenge for screen readers, and Gmail's drag-and-drop lacked clear visual targets for where an email could be dropped.</li>
-                    <li>Prioritizing mouse and keyboard interactions in desktop design often leads to smaller UI elements, which can negatively impact usability on touch devices where precision is lower.</li>
                 </ul>
                 
                 <div class="breadcrumb-nav"><ul></ul></div>
@@ -478,7 +491,7 @@
                 <p>This page explores the usability and overall user experience of a microwave interface found in a shared dorm space. Through real-life observations and 3 user interviews, the goal was to identify usability issues, understand user behavior, and create personas that relate to the perceptions of the microwave's interface.</p>
 
                 <h3 id="breadcrumb-interface">Interface</h3>
-                <p>The project is focused around a simple microwave button interface in a suite common area. The microwave is in a public space and is used by a lot of people, making it an ideal interface for observation.</p>
+                <p>The project is focused around a simple microwave button interface in a suite common area. The microwave is in a public space and is used by a lot of people, making it ideal for observation.</p>
                 <figure class="centered-image" tabindex="0">
                     <img src="images/personas-and-storyboarding-images/microwave-sketch.png" alt="Sketch of microwave interface with buttons and small screen.">
                     <figcaption>Microwave interface sketch.</figcaption>
@@ -697,7 +710,10 @@
           contentHTML = `
                 <div class="case-study-header">
                   <h2>Iterative Design & Evaluation</h2>
-                   
+                  <a href="https://22ridley.github.io/cs1300-iterative-redesign/" target="_blank" class="case-study-link-button">
+                    Original Case Study
+                    <img src="images/external-link-icon.png" alt="External link" class="external-link-icon">
+                  </a>
                 </div>
                  <p><strong>Team:</strong> Ethan Wei, Sarah Ridley, Priyam Parekh, Zeeshan Bhalwani</p>
                  <p><strong>My Role:</strong> Initial Sketches, Lo-Fi Wireframing (Balsamiq), Hi-Fi Mockup (Reserve Charging Page), User Testing Interview</p> 
@@ -705,7 +721,7 @@
                 
                 <h3 id="breadcrumb-intro">Introduction</h3>
                 <h4>Curo - Connecting EV Fleets & Charger Depots</h4>
-                <p>In this case study, our group developed design and critique skills by iteratively creating digital interfaces for Curo, a Y Combinator startup. Curo's mission is to connect electric vehicle (EV) fleet managers and charger depot owners to utilize charger downtime effectively.</p>
+                <p>Our team of 4 developed design and critique skills by iteratively creating digital interfaces for Curo, a Y Combinator startup. Curo's mission is to connect electric vehicle (EV) fleet managers and charger depot owners to utilize charger downtime effectively.</p>
                 <p>Imagine an Amazon regional manager needing more chargers for their electric delivery fleet, and a grocery store owner with EV chargers unused overnight. Curo facilitates a connection where the fleet manager finds affordable charging, and the depot owner earns revenue from leasing chargers during off-hours.</p>
                 <h4>Our Approach</h4>
                 <p>We designed Curo's platform independently, avoiding their existing interfaces. Our process involved:</p>
@@ -791,26 +807,53 @@
                 </ul>
 
                 <h3 id="breadcrumb-hifi">Hi-Fi Prototype</h3>
-                <p>We translated the refined wireframes into an interactive Hi-Fi prototype in Figma, focusing on a unified brand identity and UI best practices. We balanced critique feedback (surfacing more info upfront) with maintaining a relatively minimal interface until users interact for more details. Visual consistency across personas and essential features like messaging were key additions.</p>
+                <p>We translated the refined wireframes into an interactive Hi-Fi prototype in Figma, focusing on a unified brand identity and accessible and consistent design. We balanced critique feedback (surfacing more info upfront) with maintaining a relatively minimal interface until users interact for more details. Visual consistency across personas and essential features like messaging were key additions.</p>
                 <h4>Figma Prototype</h4>
                  <div class="iframe-container">
                      <iframe style="border: none;" width="800" height="450" src="https://embed.figma.com/proto/CIIizX9Wve7DCsOqA9qCHL/CS1300--Curo-Design?page-id=0%3A1&node-id=9-2&p=f&scaling=scale-down&starting-point-node-id=9%3A2&embed-host=share" allowfullscreen></iframe>
                  </div>
                 <h4>Loom Demo Video</h4>
-                <p><a href="https://www.loom.com/share/0d9df309f1f641dc96044be0cb168bca?sid=af04b5e8-99ea-481b-a4bb-2b762cd42ed9" target="_blank">Link to Loom Demo</a> (Note: Embedding directly might not work consistently, providing link).</p>
-                
-                <h4>Design Rationale</h4>
-                <p>Our UI centers on an onboarding flow diverging by persona (inspired by platforms like Fiverr). Depot owners get a dashboard for managing requests, availability, and stats. Fleet managers get a map-focused view for finding and reserving chargers, plus vehicle tracking. Both have messaging capabilities.</p>
+          <div style="position: relative; padding-bottom: 64%; height: 0">
+            <iframe
+              src="https://www.loom.com/embed/71ba88130f744e20b1ad41ba5cc52296?sid=baca8cab-2760-403a-ab63-54c7429dea67"
+              frameborder="0"
+              webkitallowfullscreen
+              mozallowfullscreen
+              allowfullscreen
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 90%;
+                height: 100%;
+                left: 5%;
+              "
+            ></iframe>
+          </div>
+                 
+                 <h4>Design Rationale</h4>
+                 <p>Our UI centers on an onboarding flow diverging by persona (inspired by platforms like Fiverr). Depot owners get a dashboard for managing requests, availability, and stats. Fleet managers get a map-focused view for finding and reserving chargers, plus vehicle tracking. Both have messaging capabilities.</p>
 
                 <h3 id="breadcrumb-testing">User Testing</h3>
                 <h4>User Testing Approach</h4>
                 <p>We conducted usability tests with our Hi-Fi prototype. Each team member tested one user. The core task was: <em>Log in as a depot owner and accept a reservation request.</em></p>
                 <h4>Questions Asked</h4>
                 <ul>
-                    <li>(Pre-test) Expectations for sign-in? Expected info/steps for accepting requests?</li>
-                    <li>(Post-test) Confusion finding requests? Adequate info provided? Intuitive communication options? Confidence in reservation being respected? Similarity to expectations?</li>
+                    <li><strong>Before the usability test:</strong></li>
+                    <ul>
+                        <li>What would you typically expect from a sign-in experience?</li>
+                        <li>As a depot owner, what information and steps would you expect to see when accepting an EV reservation request?</li>
+                    </ul>
+                    <li><strong>After the usability test:</strong></li>
+                    <ul>
+                        <li>Was there anything confusing about where to find your reservation requests? Did you have a hard time finding where it was displayed?</li>
+                        <li>Did you feel like you had adequate information on the request details to make a decision on whether to accept or decline?</li>
+                        <li>Was it intuitive to know where to get more information or communicate with the fleet manager that requested?</li>
+                        <li>How confident are you that this reservation will be respected by the other party?</li>
+                        <li>How similar was the experience to what you expected? Do you think the differences were good or bad?</li>
+                    </ul>
                 </ul>
-                 <h4>My User Test (Priyam)</h4>
+                 <h4>My User Test</h4>
                  <div class="iframe-container">
                     <iframe 
                         src="https://www.loom.com/embed/0d9df309f1f641dc96044be0cb168bca?sid=af04b5e8-99ea-481b-a4bb-2b762cd42ed9" 
@@ -1014,8 +1057,11 @@
         const projectTitle =
           projectItemElement.querySelector(".icon-label").textContent;
         const windowId = `project-${projectId}-window`;
+        const existingWindow = document.getElementById(windowId);
 
-        if (!document.getElementById(windowId)) {
+        if (existingWindow) {
+          makeWindowActive(existingWindow);
+        } else {
           createWindow(windowId, projectTitle);
         }
       }
@@ -1073,6 +1119,40 @@
         });
 
         makeElementDraggable(stickyNote);
+
+        const nameMenuItem = document.getElementById("menu-item-name");
+        const namePopup = document.getElementById("name-popup");
+
+        if (nameMenuItem && namePopup) {
+          nameMenuItem.addEventListener("click", (event) => {
+            console.log("Name menu item clicked!");
+            namePopup.classList.toggle("popup-visible");
+            console.log(
+              "Popup visibility toggled. Class list:",
+              namePopup.classList
+            );
+            event.stopPropagation();
+          });
+
+          document.addEventListener("click", (event) => {
+            if (
+              !nameMenuItem.contains(event.target) &&
+              namePopup.classList.contains("popup-visible")
+            ) {
+              console.log("Clicked outside popup, closing.");
+              namePopup.classList.remove("popup-visible");
+            }
+          });
+          document.addEventListener("touchstart", (event) => {
+            if (
+              !nameMenuItem.contains(event.target) &&
+              namePopup.classList.contains("popup-visible")
+            ) {
+              console.log("Touched outside popup, closing.");
+              namePopup.classList.remove("popup-visible");
+            }
+          });
+        }
 
         function openFolder(folderElement) {
           if (folderElement === aboutFolder) {

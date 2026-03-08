@@ -52,7 +52,7 @@
           </div>
         </div>
         <div class="window-info-bar">
-          <span>4 items</span>
+          <span>6 items</span>
           <span>5.4 MB used</span>
           <span>24.6 MB free</span>
         </div>
@@ -81,7 +81,7 @@
         <div class="sticky-note-header"></div>
         <div class="sticky-note-content">
           Hey I'm Priyam Parekh—a CS and Entrepreneurship student at Brown and
-          <i>full-stack developer</i> passionate about building products people
+          <i>developer</i> passionate about building products people
           love!
         </div>
       </div>
@@ -108,6 +108,60 @@
     </div>
     <script>
       let highestZIndex = 11;
+      const STORAGE_KEY = "portfolio-open-windows";
+
+      function persistOpenWindow(id, title) {
+        try {
+          const stored = sessionStorage.getItem(STORAGE_KEY);
+          const list = stored ? JSON.parse(stored) : [];
+          const filtered = list.filter((w) => w.id !== id);
+          filtered.push({ id, title });
+          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(filtered));
+        } catch (_) {}
+      }
+
+      function unpersistWindow(id) {
+        try {
+          const stored = sessionStorage.getItem(STORAGE_KEY);
+          if (!stored) return;
+          const list = JSON.parse(stored).filter((w) => w.id !== id);
+          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+        } catch (_) {}
+      }
+
+      function clearPersistedWindows() {
+        try {
+          sessionStorage.removeItem(STORAGE_KEY);
+        } catch (_) {}
+      }
+
+      const PROJECT_TITLES = {
+        "accessible-components": "Accessible Components",
+        "personas-storyboarding": "Personas & Storyboarding",
+        "responsive-redesign": "Responsive Redesign",
+        "iterative-design": "Iterative Design",
+        "churn-prediction": "Churn Prediction",
+        "brain-tumor-classification": "Brain Tumor Classification",
+        "nba-analytics": "Predicting NBA Team Performance Using Machine Learning"
+      };
+
+      function restorePersistedWindows() {
+        try {
+          const stored = sessionStorage.getItem(STORAGE_KEY);
+          if (!stored) return;
+          const list = JSON.parse(stored);
+          list.forEach(({ id, title }) => {
+            if (!document.getElementById(id)) {
+              let displayTitle = title;
+              if (id.startsWith("project-") && id.endsWith("-window")) {
+                const projectId = id.replace("project-", "").replace("-window", "");
+                displayTitle = PROJECT_TITLES[projectId] || title;
+              }
+              createWindow(id, displayTitle);
+            }
+          });
+        } catch (_) {}
+      }
 
       function makeWindowActive(windowElement) {
         document
@@ -290,6 +344,18 @@
                         <img src="images/doc-icon.png" alt="Iterative Design Project" />
                         <span class="icon-label">Iterative Design</span>
                     </div>
+                    <div class="project-item" tabindex="0" data-project-id="churn-prediction">
+                        <img src="images/doc-icon.png" alt="Churn Prediction Project" />
+                        <span class="icon-label">Churn Prediction</span>
+                    </div>
+                    <div class="project-item" tabindex="0" data-project-id="brain-tumor-classification">
+                        <img src="images/doc-icon.png" alt="Brain Tumor Classification Project" />
+                        <span class="icon-label">Brain Tumor Classification</span>
+                    </div>
+                    <div class="project-item" tabindex="0" data-project-id="nba-analytics">
+                        <img src="images/doc-icon.png" alt="Predicting NBA Team Performance Using Machine Learning" />
+                        <span class="icon-label">Predicting NBA Team Performance Using Machine Learning</span>
+                    </div>
                 </div>
             `;
         } else if (id === "about-window") {
@@ -298,7 +364,7 @@
                     <img src="images/personal-pic.png" alt="Priyam Parekh" class="about-pic">
                     <p>Hey 👋 I'm Priyam Parekh!</p>
                     <p>I'm a Computer Science and Entrepreneurship student at Brown University, passionate about building products people truly love. My focus is on creating memorable and effective interfaces, blending technical skill with user-centered design principles.</p>
-                    <p>With experience in full-stack development and technical consulting, I enjoy tackling complex challenges and turning ideas into practical solutions. I'm particularly excited about the potential of AI and Large Language Models (LLMs) and how they can transform entire industries.</p>
+                    <p>With experience in software development and technical consulting, I enjoy tackling complex challenges and turning ideas into practical solutions. I'm particularly excited about the potential of AI and Large Language Models (LLMs) and how they can transform entire industries.</p>
                 </div>
              `;
         } else if (id === "resume-window") {
@@ -893,6 +959,178 @@
 
                 <div class="breadcrumb-nav"><ul></ul></div>
            `;
+        } else if (id === "project-churn-prediction-window") {
+          contentHTML = `
+                <div class="case-study-header">
+                  <h2>Customer Churn Prediction</h2>
+                  <div class="case-study-links">
+                    <a href="https://github.com/priyam-parekh/churn-prediction" target="_blank" class="case-study-link-button">
+                      GitHub
+                      <img src="images/external-link-icon.png" alt="External link" class="external-link-icon">
+                    </a>
+                    <a href="https://www.kaggle.com/datasets/safrin03/predictive-analytics-for-customer-churn-dataset" target="_blank" class="case-study-link-button">
+                      Kaggle Dataset
+                      <img src="images/external-link-icon.png" alt="External link" class="external-link-icon">
+                    </a>
+                  </div>
+                </div>
+                <p><strong>Predictive Modeling to Determine the Core Drivers of Churn and Retention in Subscription Services</strong></p>
+                <p><strong>Author:</strong> Priyam Parekh · <strong>Date:</strong> Dec 12, 2025</p>
+                <hr class="case-study-divider">
+
+                <h3 id="breadcrumb-overview">Overview</h3>
+                <p>Predicting whether a subscription customer will churn or stay, and which features matter most for that prediction. I chose this because it ties CS to something practical—for subscription businesses, losing customers directly hurts growth, and spotting who might leave early gives a chance to intervene. Churn isn't driven by one thing; it's billing, usage, support, demographics, etc. So the goal isn't only to build a classifier but to see which levers actually move the needle.</p>
+                <p><strong>What the pipeline does:</strong> Binary classification (Churn = 1 left, Churn = 0 stayed). I use gradient boosted trees—XGBoost and LightGBM—since they handle mixed feature types and give interpretable importance scores. Outputs are evaluation metrics (AUC-ROC, F1, etc.) and plots in <code>results/</code>.</p>
+
+                <h3 id="breadcrumb-data">Data</h3>
+                <p>Kaggle dataset <strong>"Predictive Analytics for Customer Churn"</strong>. Files used: <code>customer-churn-dataset/train.csv</code>, <code>test.csv</code>, and <code>data_descriptions.csv</code>. Note: Kaggle's test set doesn't have Churn labels, so the main performance numbers come from the validation split and cross-validation.</p>
+                <p>Training: 243,787 rows, 21 columns (20 features + Churn). Test: 104,480 rows, 20 columns (no labels). Dataset is imbalanced: ~18% churn, ~82% retained. Features cover account attributes (AccountAge, Gender), billing (SubscriptionType, PaymentMethod, MonthlyCharges, TotalCharges), engagement (ViewingHoursPerWeek, AverageViewingDuration, ContentDownloadsPerMonth, WatchlistSize, ContentType, GenrePreference), support (SupportTicketsPerMonth, UserRating), and binary flags (PaperlessBilling, ParentalControl, SubtitlesEnabled, etc.).</p>
+
+                <h3 id="breadcrumb-pipeline">Pipeline &amp; Layout</h3>
+                <p><code>src/main.py</code> runs the full pipeline. Preprocessing (missing values, encoding, feature engineering, scaling) lives in <code>data_preprocessing.py</code>. <code>gbdt_models.py</code> trains XGBoost and LightGBM and can run Optuna tuning. <code>model_validation.py</code> does stratified K-fold CV and basic data-quality checks. <code>model_evaluation.py</code> computes metrics and picks the best model. Feature importance and EDA plots are in <code>feature_importance.py</code> and <code>churn_visualizations.py</code>. <code>utils.py</code> has data loading and plot-saving helpers. Data sits in <code>customer-churn-dataset/</code>, figures go to <code>results/</code>.</p>
+
+                <h3 id="breadcrumb-preprocessing">Preprocessing &amp; Feature Engineering</h3>
+                <p>Missing values: median imputation for numerical features, most-frequent for categorical/binary. Unseen categories in non-training splits are mapped to a safe default before encoding. Categorical and binary features use label encoding; after splitting, standardization is applied via StandardScaler.</p>
+                <p>Engineered features include: <code>TotalChargesPerMonth</code>, <code>MonthlyChargesRatio</code>, <code>ViewingHoursPerMonth</code>, <code>ViewingIntensity</code>, <code>SupportIntensity</code>, <code>ContentEngagement</code>, <code>LowRating</code>, <code>HighSupportUsage</code>. These reflect real-world behaviors (e.g., engagement intensity, support burden) to support interpretability.</p>
+
+                <h3 id="breadcrumb-methodology">Methodology</h3>
+                <p><strong>Models:</strong> XGBoost and LightGBM (GBDT). Objective: binary logistic loss. Regularization: <code>max_depth=4</code>, <code>learning_rate=0.1</code>, <code>n_estimators=100</code>, <code>subsample=0.8</code>, <code>colsample_bytree=0.8</code>. Optional Optuna hyperparameter tuning (TPE sampler, e.g. <code>--n-trials 20</code>).</p>
+                <p><strong>Evaluation:</strong> 80/20 stratified train/validation split; stratified 5-fold CV (AUC-ROC). Primary metric: AUC-ROC; also accuracy, precision, recall, F1. Reported run: full dataset, <code>random_state=42</code>, Optuna enabled.</p>
+
+                <h3 id="breadcrumb-results">Results</h3>
+                <figure class="churn-results-graphic" tabindex="0">
+                  <img src="images/churn-results-graphic.svg" alt="Churn prediction results: top feature importance bars, validation AUC and F1, and dataset balance 18% churn / 82% retained." width="520" height="280">
+                  <figcaption>Results at a glance: XGBoost feature importance (top 6), hold-out and CV metrics, and class balance.</figcaption>
+                </figure>
+                <p><strong>Cross-validation (5-fold CV AUC-ROC):</strong> XGBoost 0.7464, LightGBM 0.7459. <strong>Hold-out validation:</strong> XGBoost Val AUC 0.7524, Val F1 0.1888; LightGBM Val AUC 0.7516, Val F1 0.1874. XGBoost selected as final model. With <code>--optimize-for-accuracy</code>, ~67–68% accuracy on 25K subset, ~82% on full dataset; dataset imbalance makes majority baseline ~82%, so AUC and F1 remain better indicators of discrimination.</p>
+                <p><strong>Plots in <code>results/</code>:</strong> <code>churn_correlation.png</code>, <code>churn_rate_by_category.png</code>, <code>feature_importance.png</code>, <code>churn_predictors_vs_retention_indicators.png</code>, <code>roc_curves.png</code>, <code>confusion_matrix.png</code>.</p>
+
+                <h3 id="breadcrumb-drivers">Key Drivers &amp; Interpretation</h3>
+                <p>Top churn drivers from XGBoost feature importance: (1) MonthlyChargesRatio, (2) AccountAge, (3) SupportIntensity, (4) AverageViewingDuration, (5) ContentDownloadsPerMonth, (6) ViewingHoursPerWeek, (7) MonthlyCharges, (8) ViewingHoursPerMonth, (9) SubscriptionType, (10) HighSupportUsage. Engagement, billing intensity, and support/satisfaction signals all matter—aligning with the idea that declining usage and higher relative cost increase churn risk.</p>
+
+                <h3 id="breadcrumb-setup">Setup &amp; Run</h3>
+                <p>From repo root:</p>
+                <pre><code>python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt</code></pre>
+                <p>Run (default 10K samples, few minutes):</p>
+                <pre><code>python src/main.py</code></pre>
+                <p>Full data:</p>
+                <pre><code>python src/main.py --use-full-dataset</code></pre>
+                <p>Options: <code>--sample-size 5000</code>, <code>--optimize-hyperparameters --n-trials 20</code>, <code>--optimize-for-accuracy</code>. Reproducibility: seed 42 for splits and Optuna; use <code>--use-full-dataset</code> for reported numbers.</p>
+
+                <h3 id="breadcrumb-reflection">Reflection</h3>
+                <p><strong>Accuracy and results:</strong> 5-fold CV AUC-ROC: XGBoost 0.7464, LightGBM 0.7459. Hold-out validation: XGBoost AUC 0.7524, F1 0.1888; LightGBM AUC 0.7516, F1 0.1874. With <code>--optimize-for-accuracy</code>: ~67–68% accuracy on a 25K subset, ~82% on the full dataset. Dataset class balance: 18% churn, 82% retained.</p>
+                <p><strong>Interpretation:</strong> The project aimed to predict churn and identify which levers drive it so businesses can intervene. AUC ~0.75 means the model correctly ranks a random churner above a random non-churner 75% of the time—moderate but usable for prioritization. Raw accuracy (~82% on full data) is misleading because a baseline that always predicts "retained" would also hit 82% given the imbalance; AUC and F1 are the meaningful metrics. The low F1 (0.19) indicates that at the default 0.5 threshold the model is conservative and misses many churners—acceptable if the goal is a ranked risk list (top 10% most at-risk) rather than binary yes/no predictions. The stable CV and hold-out AUC suggests the model generalizes. The top feature importance (MonthlyChargesRatio, AccountAge, SupportIntensity) directly informs what to act on: billing, tenure, and support load.</p>
+
+                <div class="breadcrumb-nav"><ul></ul></div>
+           `;
+        } else if (id === "project-brain-tumor-classification-window") {
+          contentHTML = `
+                <div class="case-study-header">
+                  <h2>Brain Tumor Classification</h2>
+                  <a href="https://github.com/priyam-parekh/deep_learning_2024_medical_imaging" target="_blank" class="case-study-link-button">
+                    GitHub
+                    <img src="images/external-link-icon.png" alt="External link" class="external-link-icon">
+                  </a>
+                </div>
+                <p><strong>Binary CNN Classification of Brain Tumor Presence from Medical MRI Images</strong></p>
+                <p><strong>Group Project</strong> · <strong>Course:</strong> Deep Learning · <strong>Tech:</strong> Python, TensorFlow/Keras, NumPy, scikit-learn, PIL</p>
+                <hr class="case-study-divider">
+
+                <h3 id="breadcrumb-overview">Overview</h3>
+                <p><strong>Objective:</strong> To build a binary classifier that accurately detects brain tumor presence from medical MRI scans, emulating a paper's approach and then improving upon it with alternative architectures and more data. We aimed to predict whether a scan indicates tumor (yes) or no tumor (no), with the broader goal of demonstrating how automated screening could assist radiologists in early detection. We emulated the paper's architecture and data setup on the main branch, then experimented with more data and alternative architectures in other branches.</p>
+
+                <h3 id="breadcrumb-data">Data</h3>
+                <p>The dataset lives in <code>medical_data/</code> with two class directories: <code>no/</code> (tumor-negative, label 0) and <code>yes/</code> (tumor-positive, label 1). Images are JPG/JPEG format. <code>preprocess.py</code> loads from both folders, matches each image to its label, randomizes the order, converts to grayscale, and resizes to 224×224. An 80/20 train-test split is applied via <code>train_test_split</code> (random_state=42). The preprocessed data is serialized to <code>medical_data/data.p</code> as a pickle containing <code>train_images</code>, <code>train_labels</code>, <code>test_images</code>, and <code>test_labels</code>. The main branch used ~300 images; other branches incorporated up to 10× more data.</p>
+
+                <h3 id="breadcrumb-model">Model Architecture</h3>
+                <p>The <code>TumorClassifierModel</code> is a custom CNN: Conv2D(64, 7×7, padding='same') → LeakyReLU → MaxPooling2D → Conv2D(32, 5×5, padding='same') → BatchNormalization → Dropout(0.35) → Flatten → Dense(520) → LeakyReLU → Dense(240) → LeakyReLU → Dense(140) → LeakyReLU → Dense(16) → LeakyReLU → Dense(1, activation='sigmoid'). Input shape is (224, 224, 1) for grayscale. The sigmoid output provides a probability for binary classification. Alternative branches in the repo use ResNet50 feature extraction (2048-D GAP vectors) or 7×7×2048 tensors with no max pooling for richer preprocessing.</p>
+
+                <h3 id="breadcrumb-training">Training &amp; Methodology</h3>
+                <p><code>main.py</code> loads <code>data.p</code>, expands dimensions for the channel axis, shuffles training indices, compiles the model with Adam optimizer (learning rate 1e-4), binary cross-entropy loss, and accuracy metric. Training uses configurable <code>batch_size</code> (default 128), <code>num_epochs</code> (default 5), and <code>learning_rate</code>. The model is fitted on train data and evaluated on test data, printing test loss and accuracy.</p>
+                <pre><code># Preprocess and create data.p
+python code/preprocess.py
+
+# Train and evaluate (CLI args: --batch_size, --num_epochs, --learning_rate, --data)
+python code/main.py --num_epochs 10 --batch_size 64</code></pre>
+
+                <h3 id="breadcrumb-results">Results</h3>
+                <p><strong>Main branch</strong> (direct replica of paper, ~300 images): maximum test accuracy <strong>~92.16%</strong>. This is strong given the small dataset. <strong>preprocessing_with_7X7X2048</strong>: 10× more data, no max pooling in preprocessing—each image yields a (7, 7, 2048) tensor for higher-fidelity features. <strong>no_resnet50</strong>: no ResNet preprocessing; raw 224×224 tensors passed through convolutional layers for feature extraction. Achieved <strong>95% accuracy</strong> with no fine-tuning, demonstrating that custom CNNs can perform well on medical imaging without transfer learning.</p>
+
+                <h3 id="breadcrumb-branches">Branch Summaries</h3>
+                <ul>
+                    <li><strong>main:</strong> Paper replica, ~300 images, ~92% test accuracy</li>
+                    <li><strong>preprocessing_with_7X7X2048:</strong> 10× more data, (7,7,2048) feature tensors, no max pooling</li>
+                    <li><strong>no_resnet50:</strong> 224×224 raw images, CNN-only feature extraction, 95% accuracy</li>
+                </ul>
+
+                <h3 id="breadcrumb-reflection">Reflection</h3>
+                <p>We demonstrated end-to-end deep learning for medical imaging: preprocessing, model design, training, and evaluation. Experimenting across branches showed that more data and alternative architectures (CNN-only, higher-dimensional features) can improve performance beyond the baseline paper. Future work: data augmentation, cross-validation, and metrics like AUC-ROC and confusion matrix for clinical use.</p>
+
+                <div class="breadcrumb-nav"><ul></ul></div>
+           `;
+        } else if (id === "project-nba-analytics-window") {
+          contentHTML = `
+                <div class="case-study-header">
+                  <h2>Predicting NBA Team Performance Using Machine Learning</h2>
+                </div>
+                <p><strong>Statistical Analysis and Machine Learning on NBA 2023–24 Game and Player Data</strong></p>
+                <p><strong>Group Project</strong> · <strong>Course:</strong> Data Science · <strong>Tech:</strong> Python, Pandas, scikit-learn, scipy.stats, matplotlib, seaborn</p>
+                <hr class="case-study-divider">
+
+                <h3 id="breadcrumb-overview">Overview</h3>
+                <p><strong>Objective:</strong> To test key assumptions about NBA performance using statistical methods and machine learning, quantify the effects of location and playing time on outcomes, and build predictive models for game results. Our group explored three hypotheses using 2023–24 season data: (1) home court advantage, (2) the relationship between minutes per game (MPG) and points per game (PPG), and (3) back-to-back game fatigue. We combined statistical tests with machine learning—logistic regression, linear regression, k-means clustering, blowout prediction, and point-differential regression—to quantify effects and build predictive models.</p>
+
+                <h3 id="breadcrumb-data">Data &amp; Pipeline</h3>
+                <p>Two data sources: <strong>Team game logs</strong> from Basketball-Reference (one JSON per team in <code>data-deliverable/data_for_teams/</code>) with Team, Opponent, Tm, Opp, Date, Streak, Location (@ = away), Outcome. <code>h1_analysis.py</code> loads all team JSONs, renames columns (Tm→Team_Score, Opp→Opponent_Score, __2→Location_Indicator), derives <code>Point_Differential = Team_Score - Opponent_Score</code>, and drops rows with missing scores. <strong>Player stats</strong> from NBAStuffer (<code>nba_stats.json</code>) with Name, Team, POS, PPG, RPG, APG, MpG. We filtered players with &lt; 10 MPG and removed duplicate rows (e.g., players who switched teams) for clean analysis.</p>
+
+                <h3 id="breadcrumb-h1">Hypothesis 1: Home vs. Away</h3>
+                <p><strong>Statistical test:</strong> Welch's unequal-variance t-test (<code>scipy.stats.ttest_ind(equal_var=False)</code>) comparing point differentials at home vs. away—robust when group variances differ. <strong>ML:</strong> Logistic regression for binary win/loss prediction from location and other features; 5-fold stratified CV for evaluation.</p>
+                <p><strong>Results:</strong> p &lt; 0.0001; mean home point differential 4.38 points higher than away. Symmetric std ~15.63 for both groups. Logistic regression ~54.72% accuracy (±2.08% CV std)—home court is one of many factors.</p>
+                <figure class="centered-image" tabindex="0">
+                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/h1_point_differential_aggregate_mean_barplot.png" alt="Mean point differential: Home vs Away with SEM bars" width="100%" style="max-width: 500px;">
+                  <figcaption>Mean point differential: Home vs Away (with SEM bars).</figcaption>
+                </figure>
+                <figure class="centered-image" tabindex="0">
+                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/h1_point_differential_aggregate_boxplot.png" alt="Point differential distribution: Home vs Away" width="100%" style="max-width: 500px;">
+                  <figcaption>Point differential distribution by location.</figcaption>
+                </figure>
+
+                <h3 id="breadcrumb-h2">Hypothesis 2: MPG vs. PPG</h3>
+                <p><strong>Method:</strong> Simple linear regression (OLS) modeling PPG as a function of MpG. Metrics: R², train/test MSE. Filtered to current team and ≥ 10 MPG; n = 424. <strong>Result:</strong> Reject null—positive relationship; more minutes → more points.</p>
+                <figure class="centered-image" tabindex="0">
+                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/minutes_vs_points_correlation.png" alt="Minutes vs Points correlation" width="100%" style="max-width: 500px;">
+                  <figcaption>MPG vs PPG correlation.</figcaption>
+                </figure>
+
+                <h3 id="breadcrumb-h3">Hypothesis 3: Back-to-Back Games</h3>
+                <p><strong>Statistical test:</strong> Paired t-test (Game 1 vs Game 2 in consecutive matchups). Null H₀: D = 0. <strong>ML:</strong> K-means clustering to group teams by average differential in back-to-backs. <strong>Result:</strong> p = 0.1805—fail to reject null; no strong evidence of a difference. One-sided p = 0.0902 hints at a slight Game 1 advantage.</p>
+                <figure class="centered-image" tabindex="0">
+                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/h3_scatter_g1_vs_g2.png" alt="Game 1 vs Game 2 scatter" width="100%" style="max-width: 500px;">
+                  <figcaption>Game 1 vs Game 2 point differential scatter.</figcaption>
+                </figure>
+
+                <h3 id="breadcrumb-ml">ML Models</h3>
+                <p><strong>Blowout prediction:</strong> Binary classification—games with margin ≥ 15 vs. non-blowouts. Logistic regression with OneHotEncoder for categorical features (Team, Opponent), 5-fold CV. Saves confusion matrix and ROC/PR curves.</p>
+                <p><strong>Point-differential regression:</strong> Ridge regression to predict point differential from Team, Opponent. ColumnTransformer for one-hot encoding; StandardScaler; Pipeline. Metrics: MSE, MAE, R². Saves actual-vs-predicted scatter.</p>
+                <figure class="centered-image" tabindex="0">
+                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/ml_blowout_confusion_matrix.png" alt="Blowout prediction confusion matrix" width="100%" style="max-width: 450px;">
+                  <figcaption>Blowout prediction confusion matrix.</figcaption>
+                </figure>
+                <figure class="centered-image" tabindex="0">
+                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/ml_pointdiff_actual_vs_predicted.png" alt="Point differential: actual vs predicted" width="100%" style="max-width: 500px;">
+                  <figcaption>Point-differential regression: actual vs predicted.</figcaption>
+                </figure>
+
+                <h3 id="breadcrumb-results">Results Summary</h3>
+                <p><strong>Hypothesis 1 (Home vs. Away):</strong> We hypothesized that teams perform better at home. Mean home point differential was 4.38 points higher than away (std ≈ 15.63 for both). Welch t-test p &lt; 0.0001—we reject the null. <strong>Interpretation:</strong> Home court advantage is real and statistically significant; 4.38 points can decide close games. Logistic regression achieved 54.72% accuracy (±2.08% CV)—meaning home location helps predict wins but is only one of many factors (roster, matchups, rest, etc.).</p>
+                <p><strong>Hypothesis 2 (MPG vs. PPG):</strong> We hypothesized a positive relationship between minutes and points per game. On n = 424 players (MpG ≥ 10), we reject the null. <strong>Interpretation:</strong> More minutes on the floor correlates with more points scored—star players who play more tend to produce more. R² and MSE quantify how much of PPG variability MpG explains and how well the model generalizes.</p>
+                <p><strong>Hypothesis 3 (Back-to-Back):</strong> We hypothesized that teams perform worse in Game 2 of back-to-backs due to fatigue. Paired t-test (D = Game 1 − Game 2): p = 0.1805 (two-sided)—we fail to reject the null. One-sided p = 0.0902 suggests a slight trend. <strong>Interpretation:</strong> We cannot conclude that back-to-back fatigue significantly hurts Game 2 performance; the data are inconclusive, though a weak trend favors Game 1.</p>
+                <p><strong>ML models:</strong> Blowout prediction tests whether we can identify lopsided games (margin ≥ 15) from Team + Location—accuracy and ROC AUC show discriminatory power. Point-differential regression tests whether we can predict game margin; R², MAE, RMSE indicate how much variance we explain and how far predictions deviate from actual outcomes (see plot).</p>
+
+                <div class="breadcrumb-nav"><ul></ul></div>
+           `;
         }
 
         newWindow.innerHTML = `
@@ -1018,6 +1256,7 @@
         const closeButton = newWindow.querySelector(".close-button");
         closeButton.addEventListener("click", (e) => {
           e.stopPropagation();
+          unpersistWindow(id);
           if (newWindow.breadcrumbScrollListener) {
             newWindow.breadcrumbScrollElement.removeEventListener(
               "scroll",
@@ -1048,6 +1287,8 @@
         );
         makeElementDraggable(newWindow);
         makeWindowActive(newWindow);
+
+        persistOpenWindow(id, title);
 
         return newWindow;
       }
@@ -1190,17 +1431,22 @@
         projectsFolder.addEventListener("dblclick", () =>
           openFolder(projectsFolder)
         );
-        resumeItem.addEventListener("dblclick", () => openFolder(resumeItem));
+        const openResumeEmail = () => {
+          window.location.href =
+            "mailto:priyamaparekh@gmail.com?subject=Requesting%20Resume";
+        };
+
+        resumeItem.addEventListener("dblclick", openResumeEmail);
         funFolder.addEventListener("dblclick", () => openFolder(funFolder));
 
         aboutFolder.addEventListener("click", () => openFolder(aboutFolder));
         projectsFolder.addEventListener("click", () =>
           openFolder(projectsFolder)
         );
-        resumeItem.addEventListener("click", () => openFolder(resumeItem));
+        resumeItem.addEventListener("click", openResumeEmail);
         funFolder.addEventListener("click", () => openFolder(funFolder));
 
-        [aboutFolder, projectsFolder, resumeItem, funFolder].forEach((item) => {
+        [aboutFolder, projectsFolder, funFolder].forEach((item) => {
           item.addEventListener("keydown", (e) => {
             if (e.key === "Enter" || e.key === " ") {
               e.preventDefault();
@@ -1208,11 +1454,19 @@
             }
           });
         });
+        resumeItem.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            openResumeEmail();
+          }
+        });
 
         trashIconDiv.addEventListener("click", () => {
           if (trashIconImg.src.includes("trash-icon.png")) {
             trashIconImg.src = "images/trash-icon-toppled.png";
           }
+
+          clearPersistedWindows();
 
           document.querySelectorAll(".window").forEach((win) => {
             if (win.id !== "portfolio-window") {
@@ -1232,6 +1486,8 @@
             trashIconDiv.click();
           }
         });
+
+        restorePersistedWindows();
       });
     </script>
   </body>

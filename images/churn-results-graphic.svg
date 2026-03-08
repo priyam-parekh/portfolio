@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 280" width="520" height="280" aria-labelledby="churn-results-title">
+  <title id="churn-results-title">Churn prediction results: feature importance and validation metrics</title>
+  <!-- Background panel - window-like -->
+  <rect x="2" y="2" width="516" height="276" rx="4" fill="#fff" stroke="#000" stroke-width="2"/>
+  <rect x="12" y="36" width="496" height="232" fill="#fafafa" stroke="#999" stroke-width="1"/>
+  <!-- Title bar -->
+  <rect x="12" y="12" width="496" height="22" fill="#e0e0e0" stroke="#000" stroke-width="1"/>
+  <text x="20" y="27" font-family="Chicago, monospace" font-size="13" fill="#000">Churn prediction results</text>
+  <!-- Feature importance -->
+  <text x="24" y="58" font-family="Chicago, monospace" font-size="11" font-weight="bold" fill="#000">Top feature importance (XGBoost)</text>
+  <text x="24" y="78" font-family="Chicago, monospace" font-size="10" fill="#000">MonthlyChargesRatio</text>
+  <rect x="195" y="70" width="115" height="10" fill="#bbbbff" stroke="#000" stroke-width="1"/>
+  <text x="24" y="95" font-family="Chicago, monospace" font-size="10" fill="#000">AccountAge</text>
+  <rect x="195" y="87" width="108" height="10" fill="#bbbbff" stroke="#000" stroke-width="1"/>
+  <text x="24" y="112" font-family="Chicago, monospace" font-size="10" fill="#000">SupportIntensity</text>
+  <rect x="195" y="104" width="102" height="10" fill="#bbbbff" stroke="#000" stroke-width="1"/>
+  <text x="24" y="129" font-family="Chicago, monospace" font-size="10" fill="#000">AvgViewingDuration</text>
+  <rect x="195" y="121" width="95" height="10" fill="#bbbbff" stroke="#000" stroke-width="1"/>
+  <text x="24" y="146" font-family="Chicago, monospace" font-size="10" fill="#000">ContentDownloads/mo</text>
+  <rect x="195" y="138" width="88" height="10" fill="#bbbbff" stroke="#000" stroke-width="1"/>
+  <text x="24" y="163" font-family="Chicago, monospace" font-size="10" fill="#000">ViewingHoursPerWeek</text>
+  <rect x="195" y="155" width="82" height="10" fill="#bbbbff" stroke="#000" stroke-width="1"/>
+  <!-- Validation metrics box -->
+  <rect x="308" y="52" width="192" height="118" fill="#fff" stroke="#000" stroke-width="1"/>
+  <text x="316" y="68" font-family="Chicago, monospace" font-size="11" font-weight="bold" fill="#000">Validation (hold-out)</text>
+  <text x="316" y="86" font-family="Chicago, monospace" font-size="10" fill="#000">XGBoost (selected)</text>
+  <text x="316" y="100" font-family="Chicago, monospace" font-size="10" fill="#000">AUC-ROC: 0.752</text>
+  <text x="316" y="114" font-family="Chicago, monospace" font-size="10" fill="#000">F1 (0.5 thresh): 0.19</text>
+  <text x="316" y="134" font-family="Chicago, monospace" font-size="10" fill="#000">LightGBM AUC: 0.752</text>
+  <text x="316" y="148" font-family="Chicago, monospace" font-size="10" fill="#000">5-fold CV AUC ~0.746</text>
+  <!-- Class balance bar -->
+  <text x="24" y="192" font-family="Chicago, monospace" font-size="11" font-weight="bold" fill="#000">Dataset balance</text>
+  <rect x="24" y="198" width="472" height="24" fill="#fff" stroke="#000" stroke-width="1"/>
+  <rect x="25" y="199" width="85" height="22" fill="#bbbbff" stroke="#000" stroke-width="0.5"/>
+  <text x="67" y="214" font-family="Chicago, monospace" font-size="10" fill="#000">18% Churn</text>
+  <rect x="110" y="199" width="385" height="22" fill="#e8e8e8" stroke="#000" stroke-width="0.5"/>
+  <text x="280" y="214" font-family="Chicago, monospace" font-size="10" fill="#000">82% Retained</text>
+  <text x="24" y="248" font-family="Chicago, monospace" font-size="9" fill="#555">Binary classification; primary metric AUC-ROC. Outputs in results/</text>
+</svg>

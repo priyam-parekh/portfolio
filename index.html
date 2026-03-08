@@ -1089,25 +1089,25 @@ python code/main.py --num_epochs 10 --batch_size 64</code></pre>
                 <p><strong>Statistical test:</strong> Welch's unequal-variance t-test (<code>scipy.stats.ttest_ind(equal_var=False)</code>) comparing point differentials at home vs. away—robust when group variances differ. <strong>ML:</strong> Logistic regression for binary win/loss prediction from location and other features; 5-fold stratified CV for evaluation.</p>
                 <p><strong>Results:</strong> p &lt; 0.0001; mean home point differential 4.38 points higher than away. Symmetric std ~15.63 for both groups. Logistic regression ~54.72% accuracy (±2.08% CV std)—home court is one of many factors.</p>
                 <figure class="centered-image" tabindex="0">
-                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/h1_point_differential_aggregate_mean_barplot.png" alt="Mean point differential: Home vs Away with SEM bars" width="100%" style="max-width: 500px;">
+                  <img src="images/nba-analytics/h1_point_differential_aggregate_mean_barplot.png" alt="Mean point differential: Home vs Away with SEM bars" width="100%" style="max-width: 500px;">
                   <figcaption>Mean point differential: Home vs Away (with SEM bars).</figcaption>
                 </figure>
                 <figure class="centered-image" tabindex="0">
-                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/h1_point_differential_aggregate_boxplot.png" alt="Point differential distribution: Home vs Away" width="100%" style="max-width: 500px;">
+                  <img src="images/nba-analytics/h1_point_differential_aggregate_boxplot.png" alt="Point differential distribution: Home vs Away" width="100%" style="max-width: 500px;">
                   <figcaption>Point differential distribution by location.</figcaption>
                 </figure>
 
                 <h3 id="breadcrumb-h2">Hypothesis 2: MPG vs. PPG</h3>
                 <p><strong>Method:</strong> Simple linear regression (OLS) modeling PPG as a function of MpG. Metrics: R², train/test MSE. Filtered to current team and ≥ 10 MPG; n = 424. <strong>Result:</strong> Reject null—positive relationship; more minutes → more points.</p>
                 <figure class="centered-image" tabindex="0">
-                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/minutes_vs_points_correlation.png" alt="Minutes vs Points correlation" width="100%" style="max-width: 500px;">
+                  <img src="images/nba-analytics/minutes_vs_points_correlation.png" alt="Minutes vs Points correlation" width="100%" style="max-width: 500px;">
                   <figcaption>MPG vs PPG correlation.</figcaption>
                 </figure>
 
                 <h3 id="breadcrumb-h3">Hypothesis 3: Back-to-Back Games</h3>
                 <p><strong>Statistical test:</strong> Paired t-test (Game 1 vs Game 2 in consecutive matchups). Null H₀: D = 0. <strong>ML:</strong> K-means clustering to group teams by average differential in back-to-backs. <strong>Result:</strong> p = 0.1805—fail to reject null; no strong evidence of a difference. One-sided p = 0.0902 hints at a slight Game 1 advantage.</p>
                 <figure class="centered-image" tabindex="0">
-                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/h3_scatter_g1_vs_g2.png" alt="Game 1 vs Game 2 scatter" width="100%" style="max-width: 500px;">
+                  <img src="images/nba-analytics/h3_scatter_g1_vs_g2.png" alt="Game 1 vs Game 2 scatter" width="100%" style="max-width: 500px;">
                   <figcaption>Game 1 vs Game 2 point differential scatter.</figcaption>
                 </figure>
 
@@ -1115,11 +1115,11 @@ python code/main.py --num_epochs 10 --batch_size 64</code></pre>
                 <p><strong>Blowout prediction:</strong> Binary classification—games with margin ≥ 15 vs. non-blowouts. Logistic regression with OneHotEncoder for categorical features (Team, Opponent), 5-fold CV. Saves confusion matrix and ROC/PR curves.</p>
                 <p><strong>Point-differential regression:</strong> Ridge regression to predict point differential from Team, Opponent. ColumnTransformer for one-hot encoding; StandardScaler; Pipeline. Metrics: MSE, MAE, R². Saves actual-vs-predicted scatter.</p>
                 <figure class="centered-image" tabindex="0">
-                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/ml_blowout_confusion_matrix.png" alt="Blowout prediction confusion matrix" width="100%" style="max-width: 450px;">
+                  <img src="images/nba-analytics/ml_blowout_confusion_matrix.png" alt="Blowout prediction confusion matrix" width="100%" style="max-width: 450px;">
                   <figcaption>Blowout prediction confusion matrix.</figcaption>
                 </figure>
                 <figure class="centered-image" tabindex="0">
-                  <img src="final-projects-team-sunshine/analysis_deliverable/visualizations/ml_pointdiff_actual_vs_predicted.png" alt="Point differential: actual vs predicted" width="100%" style="max-width: 500px;">
+                  <img src="images/nba-analytics/ml_pointdiff_actual_vs_predicted.png" alt="Point differential: actual vs predicted" width="100%" style="max-width: 500px;">
                   <figcaption>Point-differential regression: actual vs predicted.</figcaption>
                 </figure>
 
